@@ -32,7 +32,8 @@ function createPagePdf(){
 }
 
 // Add print to PDF button
-add_filter( 'the_content', function ( $content ) {
+add_filter( 'the_content', __NAMESPACE__.'\printPdfButton');
+function printPdfButton( $content ) {
     //Print to screen if the button is clicked
     if( isset($_POST['print_as_pdf'])){
 		createPagePdf();
@@ -48,10 +49,11 @@ add_filter( 'the_content', function ( $content ) {
     }
 	
 	return $content;
-});
+}
 
 // Add fields to frontend content form
-add_action('sim_page_specific_fields', function($postId){
+add_action('sim_page_specific_fields', __NAMESPACE__.'\pageSpecificFields');
+function pageSpecificFields($postId){
     ?>
 	<div id="add_print_button_div" class="frontendform">
         <h4>PDF button</h4>
@@ -61,10 +63,11 @@ add_action('sim_page_specific_fields', function($postId){
         </label>
     </div>
     <?php
-});
+}
 
 // Save the option to have a pdf button
-add_action('sim_after_post_save', function($post){
+add_action('sim_after_post_save', __NAMESPACE__.'\afterPostSave');
+function afterPostSave($post){
     //PDF button
     if(isset($_POST['add_print_button'])){
         //Store pdf button
@@ -77,12 +80,13 @@ add_action('sim_after_post_save', function($post){
     }else{
         delete_post_meta($post->ID, 'add_print_button');
     }
-});
+}
 
-add_filter('sim-single-template-bottom', function($html, $postType){
+add_filter('sim-single-template-bottom', __NAMESPACE__.'\singleTemplateBottom', 10, 2);
+function singleTemplateBottom($html, $postType){
     return "<div class='print_as_pdf_div'>
         <form method='post' id='print_as_pdf_form'>
             <button type='submit' class='button' name='print_as_pdf' id='print_as_pdf' style='margin-left: 10px;'>Print this $postType</button>
         </form>
     </div>";
-}, 10, 2);
+}

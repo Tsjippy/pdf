@@ -23,7 +23,8 @@ function checkIfOnlyPdf($content){
 }
 
 //Show PDFs full screen
-add_filter( 'the_content', function ( $content ) {
+add_filter( 'the_content',  __NAMESPACE__.'\showFullScreen');
+function showFullScreen( $content ) {
     $postId 	= get_the_ID();
     $content	= str_replace('<p>&nbsp;</p>','',$content);
 
@@ -79,14 +80,15 @@ add_filter( 'the_content', function ( $content ) {
     }
 	
 	return $content;
-});
+}
 
 // add url to signal message
-add_filter('sim_signal_post_notification_message', function( $excerpt, $post){
+add_filter('sim_signal_post_notification_message', __NAMESPACE__.'\postNotification', 10, 2);
+function postNotification( $excerpt, $post){
     // if this is a fullscreen pdf always return the url
     if(checkIfOnlyPdf($post->post_content)){
         return $excerpt."\n\n".get_permalink($post);
     }
 
     return $excerpt;
-}, 10, 2);
+}
