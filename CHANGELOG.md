@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- remobve anonymous functions
 
 ### Fixed
 
