@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- only allow png
 
 ### Fixed
 
