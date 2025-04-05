@@ -27,7 +27,7 @@ function moduleOptions($optionsHtml, $settings){
 	<br>
 	<br>
 	<?php
-	SIM\pictureSelector('logo', 'Logo for use in PDF headers', $settings, 'jpe');
+	SIM\pictureSelector('logo', 'Logo for use in PDF headers', $settings, 'png');
 
 	return $optionsHtml.ob_get_clean();
 }
