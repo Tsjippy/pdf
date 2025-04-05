@@ -4,11 +4,16 @@
 ### Added
 
 ### Changed
-- only allow png
 
 ### Fixed
 
 ### Updated
+
+## [8.0.5] - 2025-04-05
+
+
+### Changed
+- only allow png
 
 ## [8.0.4] - 2025-02-13
 
