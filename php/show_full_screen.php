@@ -9,12 +9,12 @@ if(!SIM\getModuleOption(MODULE_SLUG, 'full_screen')){
 
 function checkIfOnlyPdf($content){
     //If the string starts with 0 or more spaces, then a <p> followed by a hyperlink ending in .pdf then the download text ending an optional download button followed with 0 or more spaces.
-    $pattern = '/^\s*<p><a href="(.*?\.pdf)">([^<]*<\/a>)(.*\.pdf">Download<\/a>)?<\/p>\s*$/i';
+    $pattern = '/^\s*<p><a href="(.*?\.pdf)">([^<]*)<\/a>(.*\.pdf">Download<\/a>)?<\/p>\s*$/i';
     
     //Execute the regex
     preg_match($pattern, $content, $matches);
 
-    //If an url exists it means there is only a pdf on this page
+    //If an url exists it means there is only one pdf on this page
     if(isset($matches[2])){
         return $matches;
     }
@@ -26,60 +26,61 @@ function checkIfOnlyPdf($content){
 add_filter( 'the_content',  __NAMESPACE__.'\showFullScreen');
 function showFullScreen( $content ) {
     $postId 	= get_the_ID();
-    $content	= str_replace('<p>&nbsp;</p>','',$content);
+    $content	= str_replace('<p>&nbsp;</p>', '', $content);
 
     $matches    = checkIfOnlyPdf($content);
     
     //If an url exists it means there is only a pdf on this page
     if($matches){
-        /* IF PEOPLE HAVE TO READ IT, MARK AS READ */
-        $audience	= get_post_meta($postId, "audience", true);
-        
-        if(!empty($audience)){
-            //Get current user id
-            $userId = get_current_user_id();
-            
-            //get current alread read pages
-            $readPages		= (array)get_user_meta( $userId, 'read_pages', true );
-            
-            //only add if not already there
-            if(!in_array($postId, $readPages)){
-                //add current page
-                $readPages[]	= $postId;
-        
-                //update db
-                update_user_meta( $userId, 'read_pages', $readPages);
-            }
-        }
+        do_action('sim-pdf-before-fullscreen', $postId);
 
-        /* SHOW THE PDF */
-        //Show the pdf fullscreen only if we are not a content manager
-        if(
-            !in_array('editor', wp_get_current_user()->roles)   &&  // We are not an editor
-            (
-                (
-                    function_exists('SIM\CONTENTFILTER\isProtected') && // check if we should block this page function exists
-                    !SIM\CONTENTFILTER\isProtected()                    // page is not protected
-                )   ||
-                !function_exists('SIM\CONTENTFILTER\isProtected')       // or the function does not exist
-            )
-        ){
-            //Get the url to the pdf
-            $pdfUrl = $matches[1];
-            
-            //Convert to path
-            $path = SIM\urlToPath($pdfUrl);
-            
-            //Echo the pdf to screen
-            SIM\clearOutput();
-            header("Content-type: application/pdf");
-            header("Content-Disposition: inline; filename=".$matches[2]);
-            @readfile($path);
-            ob_end_flush();
+        //Get the url to the pdf
+        $url    = $matches[1];
+        $text   = str_replace('-', ' ', explode('.', end(explode("/", $matches[2])))[0]);
+
+        replaceAnchorWithContainer($content, $matches[0], $url, $text);
+    }else{
+        preg_match_all("/<a.*? href=(\"|')(.*?)(\"|').*?>(.*?)<\/a>/i", $content, $anchors);
+
+        foreach($anchors[0] as $index=>$raw){
+            replaceAnchorWithContainer($content, $raw, $anchors[2][$index], $anchors[4][$index], true);
         }
     }
 	
 	return $content;
+}
+
+function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
+
+    if(!empty($hidden)){
+        $class  = 'hidden';
+    }
+
+    /* SHOW THE PDF FULLSCREEN AND SHOW A CLOSE BUTTON */
+    ob_start();
+
+    if(wp_is_mobile()){
+        $style  = "top: 0; right: 50px;";
+        $close  = "X";
+    }else{
+        $style  = "top: 10px; right: 90px;";
+        $close  = "Close PDF";
+    }
+
+    ?> 
+        <div>
+            <button class='button small' onclick="this.parentElement.querySelector('.full-screen-pdf-wrapper').classList.remove('hidden')" style='margin-top:10px;'>Show <?php echo $text;?></button>
+            <div class='full-screen-pdf-wrapper <?php echo $class;?>'>
+                <button type='button' id='close-full-screen' class='button small' style='position: absolute; z-index: 99992; <?php echo $style;?>' onclick='this.parentElement.classList.add("hidden");'>
+                    <?php echo $close;?>
+                </button>
+                <object data='<?php echo $url;?>' style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:100vh;' type='application/pdf'></object>
+            </div>
+        </div>
+    <?php
+    
+    // Replace the url with a button
+    $content    = str_replace($raw, ob_get_clean(), $content);
 }
 
 // add url to signal message
