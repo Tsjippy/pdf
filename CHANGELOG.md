@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- show pdf full screen with close
 
 ### Fixed
 
