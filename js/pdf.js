@@ -22,9 +22,10 @@ async function getPdfPageDimensions(pdfUrl, pageNumber = 1) {
 console.log('pdf.js loaded');
 
 document.querySelectorAll('.full-screen-pdf-wrapper').forEach( async el => {
-    let height  = await getPdfPageDimensions(el.data, 1);
+    let object  = el.querySelector('object');
+    let height  = await getPdfPageDimensions(object.data, 1);
 
     el.querySelector('div').style.height = `${height}px`;
 
-    el.querySelector('object').style.height = `${height}px`;
+    object.style.height = `${height}px`;
 });
