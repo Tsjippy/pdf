@@ -6,10 +6,10 @@ async function getPdfPageDimensions(pdfUrl, pageNumber = 1) {
 
         const page = await pdf.getPage(pageNumber);
 
-        const width = page.view[2];
+        //const width = page.view[2];
         const height = page.view[3];
 
-        console.log(`Page ${1} dimensions: Width = ${width} PDF units, Height = ${height} PDF units`);
+        //console.log(`Page ${1} dimensions: Width = ${width} PDF units, Height = ${height} PDF units`);
 
         return height * 1.44;
 
@@ -21,8 +21,10 @@ async function getPdfPageDimensions(pdfUrl, pageNumber = 1) {
 
 console.log('pdf.js loaded');
 
-document.querySelectorAll('.full-screen-pdf-wrapper object').forEach( async el => {
+document.querySelectorAll('.full-screen-pdf-wrapper').forEach( async el => {
     let height  = await getPdfPageDimensions(el.data, 1);
 
-    el.style.height = `${height}px`;
+    el.querySelector('div').style.height = `${height}px`;
+
+    el.querySelector('object').style.height = `${height}px`;
 });
