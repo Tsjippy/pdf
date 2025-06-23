@@ -9,6 +9,12 @@
 
 ### Updated
 
+## [8.0.6] - 2025-06-20
+
+
+### Changed
+- show pdf full screen with close
+
 ## [8.0.5] - 2025-04-05
 
 
