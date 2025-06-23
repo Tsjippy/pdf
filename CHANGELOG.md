@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- mobile styling
 
 ### Updated
+
+## [8.0.7] - 2025-06-23
+
+
+### Fixed
+- mobile styling
 
 ## [8.0.6] - 2025-06-20
 
