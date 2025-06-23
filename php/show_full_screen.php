@@ -60,21 +60,25 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
     ob_start();
 
     if(wp_is_mobile()){
-        $style  = "top: 0; right: 50px;";
-        $close  = "X";
+        $style          = "left: 90%;";
+        $close          = "X";
+        $objectStyle    = "";
     }else{
-        $style  = "top: 10px; right: 90px;";
-        $close  = "Close PDF";
+        $style          = "left: 80%; top: 13px;";
+        $close          = "Close PDF";
+        $objectStyle    = "style='height: -webkit-fill-available; width:100vw; margin-top: -30px;'";
     }
 
     ?> 
         <div>
             <button class='button small' onclick="this.parentElement.querySelector('.full-screen-pdf-wrapper').classList.remove('hidden')" style='margin-top:10px;'>Show <?php echo $text;?></button>
             <div class='full-screen-pdf-wrapper <?php echo $class;?>'>
-                <button type='button' id='close-full-screen' class='button small' style='position: absolute; z-index: 99992; <?php echo $style;?>' onclick='this.parentElement.classList.add("hidden");'>
-                    <?php echo $close;?>
-                </button>
-                <object data='<?php echo $url;?>' style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:100vh;' type='application/pdf'></object>
+                <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:1000vh; background-color: white;' >
+                    <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style;?>' onclick='this.closest(".full-screen-pdf-wrapper").classList.add("hidden");'>
+                        <?php echo $close;?>
+                    </button>
+                    <object data='<?php echo $url;?>' <?php echo $objectStyle;?> type='application/pdf'></object>
+                </div>
             </div>
         </div>
     <?php
