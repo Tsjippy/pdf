@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- mobile view
 
 ### Updated
+
+## [8.0.8] - 2025-06-23
+
+
+### Fixed
+- mobile view
 
 ## [8.0.7] - 2025-06-23
 
