@@ -73,7 +73,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
         <div>
             <button class='button small' onclick="this.parentElement.querySelector('.full-screen-pdf-wrapper').classList.remove('hidden')" style='margin-top:10px;'>Show <?php echo $text;?></button>
             <div class='full-screen-pdf-wrapper <?php echo $class;?>'>
-                <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:1000vh; background-color: white;' >
+                <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:-webkit-fill-available; background-color: white;' >
                     <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style;?>' onclick='this.closest(".full-screen-pdf-wrapper").classList.add("hidden");'>
                         <?php echo $close;?>
                     </button>

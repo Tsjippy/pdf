@@ -1,0 +1,17 @@
+{
+  "name": "forms",
+  "version": "1.0.0",
+  "description": "Forms",
+  "main": "./forms.js",
+  "type": "module",
+  "scripts": {
+    "pdf": "webpack --watch --entry ./pdf.js --output-path . --output-filename pdf.min.js --progress --mode=production --devtool source-map"
+  },
+  "author": "Ewald Harmsen",
+  "license": "ISC",
+  "devDependencies": {
+    "pdfjs-dist": "^5.3.31",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
+  }
+}
