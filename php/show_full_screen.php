@@ -40,7 +40,7 @@ function showFullScreen( $content ) {
 
         replaceAnchorWithContainer($content, $matches[0], $url, $text);
     }else{
-        preg_match_all("/<a.*? href=(\"|')(.*?)(\"|').pdf>(.*?)<\/a>/i", $content, $anchors);
+        preg_match_all("/<a.*? href=(\"|')(.*?).pdf(\"|').*?>(.*?)<\/a>/i", $content, $anchors);
 
         foreach($anchors[0] as $index=>$raw){
             replaceAnchorWithContainer($content, $raw, $anchors[2][$index], $anchors[4][$index], true);
