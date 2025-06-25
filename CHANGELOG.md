@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- only replace pdf bug
 
 ### Updated
 
