@@ -6,9 +6,11 @@
 ### Changed
 
 ### Fixed
-- fullscreen viewer inside absolute containers
 
 ### Updated
+
+## [8.1.1] - 2025-07-02
+
 
 ## [8.1.0] - 2025-07-02
 
