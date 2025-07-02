@@ -23,7 +23,7 @@ function checkIfOnlyPdf($content){
 }
 
 //Show PDFs full screen
-add_filter( 'the_content',  __NAMESPACE__.'\showFullScreen');
+add_filter( 'the_content',  __NAMESPACE__.'\showFullScreen', 90);
 function showFullScreen( $content ) {
     $postId 	= get_the_ID();
     $content	= str_replace('<p>&nbsp;</p>', '', $content);
@@ -40,7 +40,7 @@ function showFullScreen( $content ) {
 
         replaceAnchorWithContainer($content, $matches[0], $url, $text);
     }else{
-        preg_match_all("/<a.*? href=(\"|')(.*?).pdf(\"|').*?>(.*?)<\/a>/i", $content, $anchors);
+        preg_match_all("/<a.*? href=(\"|')(.*?.pdf)(\"|').*?>(.*?)<\/a>/i", $content, $anchors);
 
         foreach($anchors[0] as $index=>$raw){
             replaceAnchorWithContainer($content, $raw, $anchors[2][$index], $anchors[4][$index], true);
@@ -57,8 +57,6 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
     }
 
     /* SHOW THE PDF FULLSCREEN AND SHOW A CLOSE BUTTON */
-    ob_start();
-
     if(wp_is_mobile()){
         $style          = "left: 90%;";
         $close          = "X";
@@ -69,22 +67,32 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
         $objectStyle    = "style='height: -webkit-fill-available; width:100vw; margin-top: -30px;'";
     }
 
+    $id                 = strtolower(str_replace(' ', '_', $text));
+    // The button
+    ob_start();
     ?> 
         <div>
-            <button class='button small' onclick="this.parentElement.querySelector('.full-screen-pdf-wrapper').classList.remove('hidden')" style='margin-top:10px;'>Show <?php echo $text;?></button>
-            <div class='full-screen-pdf-wrapper <?php echo $class;?>'>
-                <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:-webkit-fill-available; background-color: white;' >
-                    <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style;?>' onclick='this.closest(".full-screen-pdf-wrapper").classList.add("hidden");'>
-                        <?php echo $close;?>
-                    </button>
-                    <object data='<?php echo $url;?>' <?php echo $objectStyle;?> type='application/pdf'></object>
-                </div>
-            </div>
+            <button class='button small pdf-fullscreen' type="button" style='margin-top:10px;' data-target="<?php echo $id;?>">Show <?php echo $text;?></button>
         </div>
     <?php
     
     // Replace the url with a button
     $content    = str_replace($raw, ob_get_clean(), $content);
+
+    // Add the container to the top
+    ob_start();
+    ?>
+    <div id="<?php echo $id;?>" class='full-screen-pdf-wrapper <?php echo $class;?>' style='z-index: 9999999;position: absolute;top: 0;left: 0;'>
+        <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:-webkit-fill-available; background-color: white;' >
+            <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style;?>' onclick='this.closest(".full-screen-pdf-wrapper").classList.add("hidden");'>
+                <?php echo $close;?>
+            </button>
+            <object data='<?php echo $url;?>' <?php echo $objectStyle;?> type='application/pdf' onload="console.log(this)"></object>
+        </div>
+    </div>
+    <?php
+    
+    $content    = ob_get_clean().$content;
 }
 
 // add url to signal message
