@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- only replace pdf bug
 
 ### Updated
+
+## [8.1.0] - 2025-07-02
+
+
+### Fixed
+- only replace pdf bug
 
 ## [8.0.9] - 2025-06-23
 
