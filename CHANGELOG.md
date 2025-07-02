@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- fullscreen viewer inside absolute containers
 
 ### Updated
 
