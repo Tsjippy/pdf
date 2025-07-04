@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- close button on mobile
 
 ### Updated
 
