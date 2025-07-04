@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- loader on mobile
 
 ### Updated
+
+## [8.1.3] - 2025-07-04
+
+
+### Fixed
+- loader on mobile
 
 ## [8.1.2] - 2025-07-04
 
