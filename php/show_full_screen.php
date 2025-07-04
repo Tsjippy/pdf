@@ -58,13 +58,13 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
 
     /* SHOW THE PDF FULLSCREEN AND SHOW A CLOSE BUTTON */
     if(wp_is_mobile()){
-        $style          = "left: 90%;";
+        $style          = "left: 90%; top: 13px;";
         $close          = "X";
-        $objectStyle    = "";
+        $objectStyle    = "min-width: 100vw;";
     }else{
         $style          = "left: 80%; top: 13px;";
         $close          = "Close PDF";
-        $objectStyle    = "style='height: -webkit-fill-available; width:100vw;'";
+        $objectStyle    = "height: -webkit-fill-available; width:100vw;";
     }
 
     $id                 = strtolower(str_replace(' ', '_', $text));
@@ -91,7 +91,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
                 <img class='loadergif' src='<?php echo SIM\LOADERIMAGEURL;?>' loading='lazy'>
                 Loading PDF...
             </div>
-            <iframe class='' src='<?php echo $url;?>' <?php echo $objectStyle;?> type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loadergif_wrapper').classList.add('hidden')"></iframe>
+            <iframe class='' src='<?php echo $url;?>' style='<?php echo $objectStyle;?>' type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loadergif_wrapper').classList.add('hidden')"></iframe>
         </div>
     </div>
     <?php
