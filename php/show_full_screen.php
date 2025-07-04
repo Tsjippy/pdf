@@ -91,7 +91,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
                 <img class='loadergif' src='<?php echo SIM\LOADERIMAGEURL;?>' loading='lazy'>
                 Loading PDF...
             </div>
-            <iframe class='' src='<?php echo $url;?>' style='<?php echo $objectStyle;?>' type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loadergif_wrapper').classList.add('hidden')"></iframe>
+            <iframe loading="lazy" src='<?php echo $url;?>' style='<?php echo $objectStyle;?>' type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loadergif_wrapper').classList.add('hidden')"></iframe>
         </div>
     </div>
     <?php
