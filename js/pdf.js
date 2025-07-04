@@ -22,12 +22,12 @@ async function getPdfPageDimensions(pdfUrl, pageNumber = 1) {
 console.log('pdf.js loaded');
 
 document.querySelectorAll('.full-screen-pdf-wrapper').forEach( async el => {
-    let object  = el.querySelector('object');
-    let height  = await getPdfPageDimensions(object.data, 1);
+    let iframe  = el.querySelector('iframe');
+    let height  = await getPdfPageDimensions(iframe.src, 1);
 
     el.querySelector('div').style.height = `${height}px`;
 
-    object.style.height = `${height}px`;
+    iframe.style.height = `${height}px`;
 });
 
 document.addEventListener('click', ev =>{
@@ -35,7 +35,7 @@ document.addEventListener('click', ev =>{
 
     if(target.matches('.pdf-fullscreen')){
         document.getElementById(target.dataset.target).classList.remove('hidden');
-        
+
         // Scroll to top
         window.scrollTo(0,0);
     }

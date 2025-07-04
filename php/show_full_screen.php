@@ -64,7 +64,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
     }else{
         $style          = "left: 80%; top: 13px;";
         $close          = "Close PDF";
-        $objectStyle    = "style='height: -webkit-fill-available; width:100vw; margin-top: -30px;'";
+        $objectStyle    = "style='height: -webkit-fill-available; width:100vw;'";
     }
 
     $id                 = strtolower(str_replace(' ', '_', $text));
@@ -91,7 +91,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
                 <img class='loadergif' src='<?php echo SIM\LOADERIMAGEURL;?>' loading='lazy'>
                 Loading PDF...
             </div>
-            <object class='' data='<?php echo $url;?>' <?php echo $objectStyle;?> type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loadergif_wrapper').classList.add('hidden')"></object>
+            <iframe class='' src='<?php echo $url;?>' <?php echo $objectStyle;?> type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loadergif_wrapper').classList.add('hidden')"></iframe>
         </div>
     </div>
     <?php
