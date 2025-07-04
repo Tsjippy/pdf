@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- loader on mobile
 
 ### Updated
 
