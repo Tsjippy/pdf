@@ -2,6 +2,7 @@
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
+- lazy loading of pdf
 
 ### Changed
 
