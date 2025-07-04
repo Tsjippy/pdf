@@ -83,11 +83,15 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
     ob_start();
     ?>
     <div id="<?php echo $id;?>" class='full-screen-pdf-wrapper <?php echo $class;?>' style='z-index: 9999999;position: absolute;top: 0;left: 0;'>
-        <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:-webkit-fill-available; background-color: white;' >
+        <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:-webkit-fill-available; min-height:100vh; background-color: white;margin-top: -33px;' >
             <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style;?>' onclick='this.closest(".full-screen-pdf-wrapper").classList.add("hidden");'>
                 <?php echo $close;?>
             </button>
-            <object data='<?php echo $url;?>' <?php echo $objectStyle;?> type='application/pdf' onload="console.log(this)"></object>
+            <div class='loadergif_wrapper' style='display: flex;justify-content: center;align-items: center;height: 100vh;'>
+                <img class='loadergif' src='<?php echo SIM\LOADERIMAGEURL;?>' loading='lazy'>
+                Loading PDF...
+            </div>
+            <object class='' data='<?php echo $url;?>' <?php echo $objectStyle;?> type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loadergif_wrapper').classList.add('hidden')"></object>
         </div>
     </div>
     <?php

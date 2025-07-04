@@ -35,5 +35,8 @@ document.addEventListener('click', ev =>{
 
     if(target.matches('.pdf-fullscreen')){
         document.getElementById(target.dataset.target).classList.remove('hidden');
+        
+        // Scroll to top
+        window.scrollTo(0,0);
     }
 })
