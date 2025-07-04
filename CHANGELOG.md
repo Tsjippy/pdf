@@ -2,13 +2,18 @@
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
-- show pdf loader
 
 ### Changed
 
 ### Fixed
 
 ### Updated
+
+## [8.1.2] - 2025-07-04
+
+
+### Added
+- show pdf loader
 
 ## [8.1.1] - 2025-07-02
 
