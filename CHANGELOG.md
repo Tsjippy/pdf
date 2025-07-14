@@ -8,6 +8,7 @@
 
 ### Fixed
 - close button on mobile
+- show full screen pdf when url does not contain http
 
 ### Updated
 
