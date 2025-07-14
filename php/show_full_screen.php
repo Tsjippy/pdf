@@ -40,7 +40,8 @@ function showFullScreen( $content ) {
 
         replaceAnchorWithContainer($content, $matches[0], $url, $text);
     }else{
-        preg_match_all("/<a.*? href=(\"|')(.*?.pdf)(\"|').*?>(.*?)<\/a>/i", $content, $anchors);
+        # Find any anchor who's href attribute starts with http(s):// and ends with .pdf
+        preg_match_all("/<a [^>]* href=(?:\"|')https{0,1}:\/\/[^'\"]*\.pdf(?:\"|').*>(.*)<\/a>/iU", $content, $anchors);
 
         foreach($anchors[0] as $index=>$raw){
             replaceAnchorWithContainer($content, $raw, $anchors[2][$index], $anchors[4][$index], true);
