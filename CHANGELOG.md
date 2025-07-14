@@ -2,15 +2,22 @@
 ## [Unreleased] - yyyy-mm-dd
 
 ### Added
-- lazy loading of pdf
 
 ### Changed
 
 ### Fixed
-- close button on mobile
-- show full screen pdf when url does not contain http
 
 ### Updated
+
+## [8.1.4] - 2025-07-14
+
+
+### Added
+- lazy loading of pdf
+
+### Fixed
+- close button on mobile
+- show full screen pdf when url does not contain http
 
 ## [8.1.3] - 2025-07-04
 
