@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- show full screen regex
 
 ### Updated
 
