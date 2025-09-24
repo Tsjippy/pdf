@@ -88,11 +88,11 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
             <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style;?>' onclick='this.closest(".full-screen-pdf-wrapper").classList.add("hidden");'>
                 <?php echo $close;?>
             </button>
-            <div class='loadergif_wrapper' style='display: flex;justify-content: center;align-items: center;height: 100vh;'>
-                <img class='loadergif' src='<?php echo SIM\LOADERIMAGEURL;?>' loading='lazy'>
+            <div class='loader_wrapper' style='display: flex;justify-content: center;align-items: center;height: 100vh;'>
+                <?php echo SIM\LOADERIMAGE;?>
                 Loading PDF...
             </div>
-            <iframe loading="lazy" src='<?php echo $url;?>' style='<?php echo $objectStyle;?>' type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loadergif_wrapper').classList.add('hidden')"></iframe>
+            <iframe loading="lazy" src='<?php echo $url;?>' style='<?php echo $objectStyle;?>' type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loader_wrapper').classList.add('hidden')"></iframe>
         </div>
     </div>
     <?php
