@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- show full screen regex
 
 ### Updated
+
+## [8.1.5] - 2025-09-24
+
+
+### Fixed
+- show full screen regex
 
 ## [8.1.4] - 2025-07-14
 
