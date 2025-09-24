@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- loader image
 
 ### Fixed
 - show full screen regex
