@@ -3,7 +3,7 @@ namespace SIM\PDF;
 use SIM;
 
 //only load this if the pdf print is enabled
-if(!SIM\getModuleOption(MODULE_SLUG, 'pdf_print')){
+if(!SIM\getModuleOption(MODULE_SLUG, 'pdf-print')){
 	return;
 }
 
@@ -35,15 +35,15 @@ function createPagePdf(){
 add_filter( 'the_content', __NAMESPACE__.'\printPdfButton');
 function printPdfButton( $content ) {
     //Print to screen if the button is clicked
-    if( isset($_POST['print_as_pdf'])){
+    if( isset($_POST['print-as-pdf'])){
 		createPagePdf();
 	}
     
     //pdf button
-    if(!empty(get_post_meta(get_the_ID(), 'add_print_button',true))){
-        $content .= "<div class='print_as_pdf_div' style='float:right;'>";
-            $content .= "<form method='post' id='print_as_pdf_form'>";
-                $content .= "<button type='submit' class='button' name='print_as_pdf'>Print this page</button>";
+    if(!empty(get_post_meta(get_the_ID(), 'add-print-button',true))){
+        $content .= "<div class='print-as-pdf-div' style='float:right;'>";
+            $content .= "<form method='post' id='print-as-pdf_form'>";
+                $content .= "<button type='submit' class='button' name='print-as-pdf'>Print this page</button>";
             $content .= "</form>";
         $content .= "</div>";
     }
@@ -55,10 +55,10 @@ function printPdfButton( $content ) {
 add_action('sim_page_specific_fields', __NAMESPACE__.'\pageSpecificFields');
 function pageSpecificFields($postId){
     ?>
-	<div id="add_print_button_div" class="frontendform">
+	<div id="add-print-button-div" class="frontend-form">
         <h4>PDF button</h4>
         <label>
-            <input type='checkbox'  name='add_print_button' value='add_print_button' <?php if(!empty(get_post_meta($postId,'add_print_button',true))){echo 'checked';}?>>
+            <input type='checkbox'  name='add-print-button' value='1' <?php if(!empty(get_post_meta($postId, 'add-print-button', true))){echo 'checked';}?>>
             Add a 'Save as PDF' button
         </label>
     </div>
@@ -69,24 +69,24 @@ function pageSpecificFields($postId){
 add_action('sim_after_post_save', __NAMESPACE__.'\afterPostSave');
 function afterPostSave($post){
     //PDF button
-    if(isset($_POST['add_print_button'])){
+    if(isset($_POST['add-print-button'])){
         //Store pdf button
-        if(empty($_POST['add_print_button'])){
+        if(empty($_POST['add-print-button'])){
             $value = false;
         }else{
             $value = true;
         }
-        update_post_meta($post->ID, 'add_print_button', $value);
+        update_post_meta($post->ID, 'add-print-button', $value);
     }else{
-        delete_post_meta($post->ID, 'add_print_button');
+        delete_post_meta($post->ID, 'add-print-button');
     }
 }
 
 add_filter('sim-single-template-bottom', __NAMESPACE__.'\singleTemplateBottom', 10, 2);
 function singleTemplateBottom($html, $postType){
-    return "<div class='print_as_pdf_div'>
-        <form method='post' id='print_as_pdf_form'>
-            <button type='submit' class='button' name='print_as_pdf' id='print_as_pdf' style='margin-left: 10px;'>Print this $postType</button>
+    return "<div class='print-as-pdf-div'>
+        <form method='post' id='print-as-pdf_form'>
+            <button type='submit' class='button' name='print-as-pdf' id='print-as-pdf' style='margin-left: 10px;'>Print this $postType</button>
         </form>
     </div>";
 }

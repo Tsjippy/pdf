@@ -5,7 +5,8 @@
   "main": "./forms.js",
   "type": "module",
   "scripts": {
-    "pdf": "webpack --watch --entry ./pdf.js --output-path . --output-filename pdf.min.js --progress --mode=production --devtool source-map"
+    "pdf": "webpack --watch --entry ./pdf.js --output-path . --output-filename pdf.min.js --progress --mode=production --devtool source-map",
+    "all": "run-p pdf"
   },
   "author": "Ewald Harmsen",
   "license": "ISC",

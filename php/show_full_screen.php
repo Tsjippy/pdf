@@ -3,7 +3,7 @@ namespace SIM\PDF;
 use SIM;
 
 //only load when checked
-if(!SIM\getModuleOption(MODULE_SLUG, 'full_screen')){
+if(!SIM\getModuleOption(MODULE_SLUG, 'full-screen')){
     return;
 }
 

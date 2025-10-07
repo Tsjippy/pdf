@@ -15,6 +15,7 @@ class PdfHtml extends \FPDF{
 	public $headertitle;
 	public $skipFirstPage;
 	public $fontlist;
+	public $skipfirstpage;
 
 	const DPI = 96;
     const MM_IN_INCH = 25.4;
@@ -273,7 +274,7 @@ class PdfHtml extends \FPDF{
 		$this->AddPage();
 
 		//Add the logo to the page
-		$logo	= get_attached_file(SIM\getModuleOption(MODULE_SLUG, 'picture_ids')['logo']);
+		$logo	= get_attached_file(SIM\getModuleOption(MODULE_SLUG, 'picture-ids')['logo']);
 		try{
 			$this->Image($logo, 70, 30, 70,0);
 		}catch (\Exception $e) {
@@ -304,7 +305,7 @@ class PdfHtml extends \FPDF{
 	 */
 	public function Header(){
 		if(!$this->skipFirstPage || $this->PageNo() != 1){
-			$logo	= get_attached_file(SIM\getModuleOption(MODULE_SLUG, 'picture_ids')['logo']);
+			$logo	= get_attached_file(SIM\getModuleOption(MODULE_SLUG, 'picture-ids')['logo']);
 			try{
 				// Logo
 				$this->Image($logo, 10, 6, 30, 0, 'JPG');

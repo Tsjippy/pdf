@@ -15,13 +15,13 @@ function moduleOptions($optionsHtml, $settings){
 	
     ?>
 	<label>
-		<input type='checkbox' name='full_screen' <?php if(isset($settings['full_screen'])){echo 'checked';}?>>
+		<input type='checkbox' name='full-screen' <?php if(isset($settings['full-screen'])){echo 'checked';}?>>
 		Show PDF documents full screen if that is the only page content
 	</label>
 	<br>
 	<br>
 	<label>
-		<input type='checkbox' name='pdf_print' <?php if(isset($settings['pdf_print'])){echo 'checked';}?>>
+		<input type='checkbox' name='pdf-print' <?php if(isset($settings['pdf-print'])){echo 'checked';}?>>
 		Add a "Print to PDF" button option
 	</label>
 	<br>
