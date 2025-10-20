@@ -734,18 +734,18 @@ class PdfHtml extends \FPDF{
 			$before 	= $temp->getY();
 
 			if(is_array($cellText)){
-				$orgLines = $cellText;
+				$orgLines 	= $cellText;
 			}else{
-				$orgLines = explode("\n", $cellText);
+				$orgLines 	= explode("\n", $cellText);
 			}
-			SIM\cleanUpNestedArray($orgLines);
+			$orgLines		= SIM\cleanUpNestedArray($orgLines);
 
-			$cellText	= implode("\n", $orgLines);
+			$cellText		= implode("\n", $orgLines);
 
-			$cellWidth 	= $colWidths[$colNr];
+			$cellWidth 		= $colWidths[$colNr];
 			
-			$x			= $temp->GetX();
-			$y			= $temp->GetY();
+			$x				= $temp->GetX();
+			$y				= $temp->GetY();
 
 			$temp->Multicell($cellWidth, 6, $cellText, 'LR', 'C');
 
@@ -807,7 +807,7 @@ class PdfHtml extends \FPDF{
 			}else{
 				$orgLines	= explode("\n", $cellText);
 			}
-			SIM\cleanUpNestedArray($orgLines);
+			$orgLines		= SIM\cleanUpNestedArray($orgLines);
 
 			$cellWidth = $colWidths[$colNr];
 			foreach($orgLines as $l_nr=>$line){
