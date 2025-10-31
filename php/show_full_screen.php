@@ -89,7 +89,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
                 <?php echo $close;?>
             </button>
             <div class='loader-wrapper' style='display: flex;justify-content: center;align-items: center;height: 100vh;'>
-                <?php echo SIM\LOADERIMAGE;?>
+                <div class="loader-image-trigger"></div>
                 Loading PDF...
             </div>
             <iframe loading="lazy" src='<?php echo $url;?>' style='<?php echo $objectStyle;?>' type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loader-wrapper').classList.add('hidden')"></iframe>
