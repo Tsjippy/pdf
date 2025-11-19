@@ -23,7 +23,7 @@ function checkIfOnlyPdf($content){
 }
 
 //Show PDFs full screen
-add_filter( 'the_content',  __NAMESPACE__.'\showFullScreen', 90);
+//add_filter( 'the_content',  __NAMESPACE__.'\showFullScreen', 90);
 function showFullScreen( $content ) {
     $postId 	= get_the_ID();
     $content	= str_replace('<p>&nbsp;</p>', '', $content);
@@ -43,7 +43,7 @@ function showFullScreen( $content ) {
         # Find any anchor who's href attribute starts with http(s):// and ends with .pdf
         preg_match_all("/<a[^>]*href=(?:\"|')(https{0,1}:\/\/[^'\"]*\.pdf)(?:\"|').*>(.*)<\/a>/iU", $content, $anchors);
 
-        foreach($anchors[0] as $index=>$raw){
+        foreach($anchors[0] as $index => $raw){
             replaceAnchorWithContainer($content, $raw, $anchors[1][$index], $anchors[2][$index], true);
         }
     }
@@ -68,7 +68,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
         $objectStyle    = "height: -webkit-fill-available; width:100vw;";
     }
 
-    $id                 = strtolower(str_replace(' ', '_', $text));
+    $id                 = strtolower(str_replace(' ', '-', $text));
     // The button
     ob_start();
     ?> 
@@ -83,7 +83,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
     // Add the container to the top
     ob_start();
     ?>
-    <div id="<?php echo $id;?>" class='full-screen-pdf-wrapper <?php echo $class;?>' style='z-index: 9999999;position: absolute;top: 0;left: 0;'>
+    <div data-id="<?php echo $id;?>" class='full-screen-pdf-wrapper <?php echo $class;?>' style='z-index: 9999999;position: absolute;top: 0;left: 0;'>
         <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:-webkit-fill-available; min-height:100vh; background-color: white;margin-top: -33px;' >
             <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style;?>' onclick='this.closest(".full-screen-pdf-wrapper").classList.add("hidden");'>
                 <?php echo $close;?>
