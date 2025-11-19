@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- bug when pdf had the same name
 
 ### Updated
 
