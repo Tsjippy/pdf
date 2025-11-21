@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- bug when pdf had the same name
 
 ### Updated
+
+## [8.2.2] - 2025-11-21
+
+
+### Fixed
+- bug when pdf had the same name
 
 ## [8.2.1] - 2025-11-03
 
