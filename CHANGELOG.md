@@ -6,6 +6,7 @@
 ### Changed
 
 ### Fixed
+- enqueue module bug
 
 ### Updated
 
