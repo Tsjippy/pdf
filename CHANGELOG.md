@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- enqueue module bug
 
 ### Updated
+
+## [8.2.4] - 2025-12-05
+
+
+### Fixed
+- enqueue module bug
 
 ## [8.2.3] - 2025-11-26
 
