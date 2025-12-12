@@ -15,7 +15,6 @@ class PdfHtml extends \FPDF{
 	public $headertitle;
 	public $skipFirstPage;
 	public $fontlist;
-	public $skipfirstpage;
 
 	const DPI = 96;
     const MM_IN_INCH = 25.4;
@@ -772,7 +771,7 @@ class PdfHtml extends \FPDF{
 	 * @param	array	$colWidths	the column widths
 	 * @param	array	$row		The row data
 	 * @param	bool	$fil		Whether to fill the row
-	 * @param	array	$header		The  table headers
+	 * @param	array	$header		The table headers
 	 */
 	public function writeTableRow($colWidths, $row, $fill, $header){
 		$y 				= $this->GetY();
@@ -834,7 +833,12 @@ class PdfHtml extends \FPDF{
 			$y	= $this->GetY();
 
 			//Write the cell
-			$this->Multicell($cellWidth, 6, $cellText, 'LR', 'C', $fill);
+			if($fill){
+				$this->SetTextColor(255, 255, 255);
+			}else{
+				$this->SetTextColor(0, 0, 0);
+			}
+			$this->Multicell($cellWidth, 6, $cellText, 'LTRB', 'C', $fill);
 
 			do_action('sim_after_pdf_text', $row[$colNr], $this, $x, $y, $cellWidth, true);
 

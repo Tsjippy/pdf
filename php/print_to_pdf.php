@@ -11,9 +11,7 @@ function createPagePdf(){
 	global $post;
 	
 	$pdf = new PdfHtml();
-	$pdf->SetFont('Arial','B',15);
-	
-	$pdf->skipfirstpage = false;
+	$pdf->SetFont('Arial', 'B', 15);
 	
 	//Set the title of the document
 	$pdf->SetTitle($post->post_title);
