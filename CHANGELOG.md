@@ -4,11 +4,16 @@
 ### Added
 
 ### Changed
-- convert failed images to jpeg
 
 ### Fixed
 
 ### Updated
+
+## [8.2.5] - 2026-01-12
+
+
+### Changed
+- convert failed images to jpeg
 
 ## [8.2.4] - 2025-12-05
 
