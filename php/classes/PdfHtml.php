@@ -674,7 +674,53 @@ class PdfHtml extends \FPDF{
 		return $newString;
 	}
 
+	function convertWebpToJpeg($source, $destination) {
+		// Check if the GD extension is installed and supports WebP
+		if (!function_exists('imagecreatefromwebp')) {
+			return false; // WebP support missing in GD
+		}
+
+		// Load the WebP image
+		$image = imagecreatefromwebp($source);
+
+		if ($image === false) {
+			return false; // Error loading image
+		}
+
+		// Handle potential alpha transparency (JPEG does not support transparency)
+		// Create a new true-color image with a white background to blend transparency
+		$width 		= imagesx($image);
+		$height 	= imagesy($image);
+		$jpegImage	= imagecreatetruecolor($width, $height);
+		$white 		= imagecolorallocate($jpegImage, 255, 255, 255);
+
+		imagefilledrectangle($jpegImage, 0, 0, $width, $height, $white);
+		imagecopyresampled($jpegImage, $image, 0, 0, 0, 0, $width, $height, $width, $height);
+
+		// Save the image as a JPEG file
+		$result 	= imagejpeg($jpegImage, $destination, 100);
+
+		// Free up memory
+		imagedestroy($image);
+		imagedestroy($jpegImage);
+
+		return $result; // Returns true on success, false on error
+	}
+
 	public function addCellPicture($filePath, $x=null, $y=null, $link='', $width=6, $reset=true){
+		/**
+		 * Convert to valid images
+		 */
+		$extension = pathinfo($filePath, PATHINFO_EXTENSION);
+		
+		if(in_array($extension, ['webp'])){
+			$destination	= str_replace($extension, 'jpg', $filePath);
+
+			if($this->convertWebpToJpeg($filePath, $destination)){
+				$filePath	= $destination;
+			}
+		}
+
 		if(empty($link)){
 			$link	= SIM\pathToUrl($filePath);
 		}
