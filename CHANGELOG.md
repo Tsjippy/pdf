@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- convert failed images to jpeg
 
 ### Fixed
 
