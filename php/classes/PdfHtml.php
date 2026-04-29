@@ -1,9 +1,13 @@
 <?php
-namespace SIM\PDF;
-use SIM;
+namespace TSJIPPY\PDF;
+use TSJIPPY;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 //load all libraries for this module
-require( MODULE_PATH  . 'lib/vendor/autoload.php');
+require( PLUGINPATH  . 'lib/vendor/autoload.php');
 
 class PdfHtml extends \FPDF{
 	//variables of html parser
@@ -170,8 +174,8 @@ class PdfHtml extends \FPDF{
 						$this->printImage($attr['SRC'], $this->GetX(), $this->GetY(), $this->px2mm($attr['WIDTH']), $this->px2mm($attr['HEIGHT']));
 						$this->SetY($this->GetY()+$this->px2mm($attr['HEIGHT'])+2);
 					}catch (\Exception $e) {
-						SIM\printArray($e);
-						SIM\printArray("{$attr['SRC']} is not a valid image");
+						TSJIPPY\printArray($e);
+						TSJIPPY\printArray("{$attr['SRC']} is not a valid image");
 					}
 				}
 				break;
@@ -273,11 +277,11 @@ class PdfHtml extends \FPDF{
 		$this->AddPage();
 
 		//Add the logo to the page
-		$logo	= get_attached_file(SIM\getModuleOption(MODULE_SLUG, 'picture-ids')['logo']);
+		$logo	= get_attached_file(SETTINGS['picture-ids'] ?? []['logo']);
 		try{
 			$this->Image($logo, 70, 30, 70,0);
 		}catch (\Exception $e) {
-			SIM\printArray("PDF_export.php: $logo is not a valid image");
+			TSJIPPY\printArray("PDF_export.php: $logo is not a valid image");
 		}
 		$this->SetFont( 'Arial', '', 42 );
 
@@ -304,12 +308,12 @@ class PdfHtml extends \FPDF{
 	 */
 	public function Header(){
 		if(!$this->skipFirstPage || $this->PageNo() != 1){
-			$logo	= get_attached_file(SIM\getModuleOption(MODULE_SLUG, 'picture-ids')['logo']);
+			$logo	= get_attached_file(SETTINGS['picture-ids'] ?? []['logo']);
 			try{
 				// Logo
 				$this->Image($logo, 10, 6, 30, 0, 'JPG');
 			}catch (\Exception $e) {
-				SIM\printArray("PDF_HELPER_Functions.php: $logo is not a valid image");
+				TSJIPPY\printArray("PDF_HELPER_Functions.php: $logo is not a valid image");
 			}
 			// Arial bold 15
 			$this->SetFont('Arial','B',15);
@@ -462,12 +466,12 @@ class PdfHtml extends \FPDF{
 								try{
 									$this->Image($image, null, null, 100, 0,  $extension);
 								}catch (\Exception $e) {
-									SIM\printArray($image." is not a valid image");
+									TSJIPPY\printArray($image." is not a valid image");
 								}
 							}
 						}else{
 							if(is_string($image) && is_file($image)){
-								$image	= SIM\pathToUrl($image);
+								$image	= TSJIPPY\pathToUrl($image);
 							}
 
 							//Write down the url as link
@@ -561,7 +565,7 @@ class PdfHtml extends \FPDF{
 	 */
 	public function printImage($url, $x=-1, $y=-1, $width=100, $height=200, $centre=false, $adjustY = false){
 		try{
-			$path = SIM\urlToPath($url);
+			$path = TSJIPPY\urlToPath($url);
 
 			if($x == -1){
 				$x = $this->getX();
@@ -605,7 +609,7 @@ class PdfHtml extends \FPDF{
 
 			$this->setXY($x+$width, $y);
 		}catch (\Exception $e) {
-			SIM\printArray("PDF_export.php: $path is not a valid image");
+			TSJIPPY\printArray("PDF_export.php: $path is not a valid image");
 		}
 	}
 
@@ -722,7 +726,7 @@ class PdfHtml extends \FPDF{
 		}
 
 		if(empty($link)){
-			$link	= SIM\pathToUrl($filePath);
+			$link	= TSJIPPY\pathToUrl($filePath);
 		}
 				
 		//Add the picture to the page
@@ -744,8 +748,8 @@ class PdfHtml extends \FPDF{
 
 			$this->Image($filePath, $x, $y, $width, 0, '', $link);
 		}catch (\Exception $e) {
-			SIM\printArray("PDF_export.php: $filePath is not a valid image");
-			//SIM\printArray($e);
+			TSJIPPY\printArray("PDF_export.php: $filePath is not a valid image");
+			//TSJIPPY\printArray($e);
 		}
 
 		if($reset){
@@ -772,7 +776,7 @@ class PdfHtml extends \FPDF{
 			$temp->AddPage();
 			$before 	= $temp->getY();
 
-			$cellText	= apply_filters('sim_before_pdf_text', $cellText, $temp);
+			$cellText	= apply_filters('tsjippy_before_pdf_text', $cellText, $temp);
 
 			$height		= $temp->getY() - $before;
 
@@ -783,7 +787,7 @@ class PdfHtml extends \FPDF{
 			}else{
 				$orgLines 	= explode("\n", $cellText);
 			}
-			$orgLines		= SIM\cleanUpNestedArray($orgLines);
+			$orgLines		= TSJIPPY\cleanUpNestedArray($orgLines);
 
 			$cellText		= implode("\n", $orgLines);
 
@@ -800,7 +804,7 @@ class PdfHtml extends \FPDF{
 
 			$before 	= $temp->getY();
 
-			do_action('sim_after_pdf_text', $row[$colNr], $temp, $x, $y, $cellWidth, false);
+			do_action('tsjippy_after_pdf_text', $row[$colNr], $temp, $x, $y, $cellWidth, false);
 
 			$after 		= $temp->getY();
 
@@ -845,14 +849,14 @@ class PdfHtml extends \FPDF{
 		foreach ($row as $colNr => $cellText){
 			$cellText	= str_replace('\\', '/', $cellText);
 
-			$cellText	= apply_filters('sim_before_pdf_text', $cellText, $this);
+			$cellText	= apply_filters('tsjippy_before_pdf_text', $cellText, $this);
 
 			if(is_array($cellText)){
 				$orgLines	= $cellText;
 			}else{
 				$orgLines	= explode("\n", $cellText);
 			}
-			$orgLines		= SIM\cleanUpNestedArray($orgLines);
+			$orgLines		= TSJIPPY\cleanUpNestedArray($orgLines);
 
 			$cellWidth = $colWidths[$colNr];
 			foreach($orgLines as $l_nr=>$line){
@@ -886,7 +890,7 @@ class PdfHtml extends \FPDF{
 			}
 			$this->Multicell($cellWidth, 6, $cellText, 'LTRB', 'C', $fill);
 
-			do_action('sim_after_pdf_text', $row[$colNr], $this, $x, $y, $cellWidth, true);
+			do_action('tsjippy_after_pdf_text', $row[$colNr], $this, $x, $y, $cellWidth, true);
 
 			//Move cursor to the next cell if not the last cell
 			if($colNr != $lastKey){
@@ -901,7 +905,7 @@ class PdfHtml extends \FPDF{
 	 */
 	public function printPdf($dest='', $name='', $isUTF8=false){
 		// CLear the complete queue
-		SIM\clearOutput();
+		TSJIPPY\clearOutput();
 
 		ob_start();
 		$this->Output($dest, $name, $isUTF8);

@@ -1,9 +1,13 @@
 <?php
-namespace SIM\PDF;
-use SIM;
+namespace TSJIPPY\PDF;
+use TSJIPPY;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 //only load this if the pdf print is enabled
-if(!SIM\getModuleOption(MODULE_SLUG, 'pdf-print')){
+if(!SETTINGS['pdf-print'] ?? false){
 	return;
 }
 
@@ -20,11 +24,11 @@ function createPagePdf(){
     $pdf->skipFirstPage = false;
     $pdf->Header();
 
-	do_action('sim-before-print-content', $post, $pdf);
+	do_action('tsjippy-before-print-content', $post, $pdf);
 	
 	$pdf->WriteHTML($post->post_content);
 
-	do_action('sim-after-print-content', $post, $pdf);
+	do_action('tsjippy-after-print-content', $post, $pdf);
 	
 	$pdf->printpdf();
 }
@@ -50,7 +54,7 @@ function printPdfButton( $content ) {
 }
 
 // Add fields to frontend content form
-add_action('sim_page_specific_fields', __NAMESPACE__.'\pageSpecificFields');
+add_action('tsjippy_page_specific_fields', __NAMESPACE__.'\pageSpecificFields');
 function pageSpecificFields($postId){
     ?>
 	<div id="add-print-button-div" class="frontend-form">
@@ -64,7 +68,7 @@ function pageSpecificFields($postId){
 }
 
 // Save the option to have a pdf button
-add_action('sim_after_post_save', __NAMESPACE__.'\afterPostSave');
+add_action('tsjippy_after_post_save', __NAMESPACE__.'\afterPostSave');
 function afterPostSave($post){
     //PDF button
     if(isset($_POST['add-print-button'])){
@@ -80,7 +84,7 @@ function afterPostSave($post){
     }
 }
 
-add_filter('sim-single-template-bottom', __NAMESPACE__.'\singleTemplateBottom', 10, 2);
+add_filter('tsjippy-single-template-bottom', __NAMESPACE__.'\singleTemplateBottom', 10, 2);
 function singleTemplateBottom($html, $postType){
     return "<div class='print-as-pdf-div'>
         <form method='post' id='print-as-pdf_form'>

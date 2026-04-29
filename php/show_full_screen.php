@@ -1,9 +1,13 @@
 <?php
-namespace SIM\PDF;
-use SIM;
+namespace TSJIPPY\PDF;
+use TSJIPPY;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 //only load when checked
-if(!SIM\getModuleOption(MODULE_SLUG, 'full-screen')){
+if(!SETTINGS['full-screen'] ?? false){
     return;
 }
 
@@ -32,11 +36,12 @@ function showFullScreen( $content ) {
     
     //If an url exists it means there is only a pdf on this page
     if($matches){
-        do_action('sim-pdf-before-fullscreen', $postId);
+        do_action('tsjippy-pdf-before-fullscreen', $postId);
 
         //Get the url to the pdf
-        $url    = $matches[1];
-        $text   = str_replace('-', ' ', explode('.', end(explode("/", $matches[2])))[0]);
+        $url        = $matches[1];
+        $exploded   = explode("/", $matches[2]);
+        $text       = str_replace('-', ' ', explode('.', end($exploded))[0]);
 
         replaceAnchorWithContainer($content, $matches[0], $url, $text);
     }else{
@@ -101,7 +106,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
 }
 
 // add url to signal message
-add_filter('sim_signal_post_notification_message', __NAMESPACE__.'\postNotification', 10, 2);
+add_filter('tsjippy_signal_post_notification_message', __NAMESPACE__.'\postNotification', 10, 2);
 function postNotification( $excerpt, $post){
     // if this is a fullscreen pdf always return the url
     if(checkIfOnlyPdf($post->post_content)){
