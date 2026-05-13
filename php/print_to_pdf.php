@@ -38,6 +38,13 @@ function createPagePdf(){
  * @return string The content with the print to PDF button if enabled
  */
 add_filter( 'the_content', __NAMESPACE__.'\printPdfButton');
+/**
+ * Adds the print to PDF button to the page content
+ *
+ * @param string $content The page content
+ *
+ * @return string The updated page content
+ */
 function printPdfButton( $content ) {
     //Print to screen if the button is clicked
     if( isset($_POST['print-as-pdf'])){
