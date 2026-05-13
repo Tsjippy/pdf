@@ -33,7 +33,10 @@ function createPagePdf(){
 	$pdf->printpdf();
 }
 
-// Add print to PDF button
+/** Add print to PDF button
+ * @param string $content The content of the page
+ * @return string The content with the print to PDF button if enabled
+ */
 add_filter( 'the_content', __NAMESPACE__.'\printPdfButton');
 function printPdfButton( $content ) {
     //Print to screen if the button is clicked
@@ -55,6 +58,13 @@ function printPdfButton( $content ) {
 
 // Add fields to frontend content form
 add_action('tsjippy_page_specific_fields', __NAMESPACE__.'\pageSpecificFields');
+/**
+ * Adds the fields for the print to PDF button to the frontend content form
+ * 
+ * @param int $postId The ID of the post being edited
+ * 
+ * @return void
+ */
 function pageSpecificFields($postId){
     ?>
 	<div id="add-print-button-div" class="frontend-form">
@@ -69,6 +79,13 @@ function pageSpecificFields($postId){
 
 // Save the option to have a pdf button
 add_action('tsjippy_after_post_save', __NAMESPACE__.'\afterPostSave');
+/**
+ * Saves the option to have a print to PDF button
+ *
+ * @param \WP_Post $post The post being saved
+ *
+ * @return void
+ */
 function afterPostSave($post){
     //PDF button
     if(isset($_POST['add-print-button'])){
@@ -84,7 +101,17 @@ function afterPostSave($post){
     }
 }
 
+
 add_filter('tsjippy-single-template-bottom', __NAMESPACE__.'\singleTemplateBottom', 10, 2);
+
+/**
+ * Adds the print to PDF button to the single template bottom
+ *
+ * @param string $html The HTML content
+ * @param string $postType The post type
+ *
+ * @return string The HTML content with the print to PDF button
+ */
 function singleTemplateBottom($html, $postType){
     return "<div class='print-as-pdf-div'>
         <form method='post' id='print-as-pdf_form'>
