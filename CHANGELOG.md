@@ -4,11 +4,16 @@
 ### Added
 
 ### Changed
-- do not store get_plugin_data in global variable
 
 ### Fixed
 
 ### Updated
+
+## [10.0.3] - 2026-05-30
+
+
+### Changed
+- do not store get_plugin_data in global variable
 
 ## [10.0.2] - 2026-05-14
 
