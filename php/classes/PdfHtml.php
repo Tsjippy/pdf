@@ -6,9 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-//load all libraries for this plugin
-require( PLUGINPATH  . 'lib/vendor/autoload.php');
-
 class PdfHtml extends \FPDF{
 	//variables of html parser
 	protected $b;
