@@ -82,7 +82,7 @@ class PdfHtml extends \FPDF{
 	public function WriteHTML($html, &$parsed = null){
 		//HTML parser
 		$html	= do_shortcode($html);
-		$html	= strip_tags($html, "<b><li><u><i><a><img><p><br><strong><em><font><tr><blockquote>");
+		$html	= wp_strip_all_tags($html, "<b><li><u><i><a><img><p><br><strong><em><font><tr><blockquote>");
 		$html	= str_replace("\n", ' ', $html);
 		$a		= preg_split('/<(.*)>/U', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
 
