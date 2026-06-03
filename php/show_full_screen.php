@@ -78,7 +78,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
     ob_start();
     ?> 
         <div>
-            <button class='button small pdf-fullscreen' type="button" style='margin-top:10px;' data-target="<?php echo $id;?>">Show <?php echo $text;?></button>
+            <button class='button small pdf-fullscreen' type="button" style='margin-top:10px;' data-target="<?php echo esc_attr($id);?>">Show <?php echo esc_attr($text);?></button>
         </div>
     <?php
     
@@ -88,7 +88,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
     // Add the container to the top
     ob_start();
     ?>
-    <div data-id="<?php echo $id;?>" class='full-screen-pdf-wrapper <?php echo $class;?>' style='z-index: 9999999;position: absolute;top: 0;left: 0;'>
+    <div data-id="<?php echo esc_attr($id);?>" class='full-screen-pdf-wrapper <?php echo esc_attr($class);?>' style='z-index: 9999999;position: absolute;top: 0;left: 0;'>
         <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:-webkit-fill-available; min-height:100vh; background-color: white;margin-top: -33px;' >
             <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style;?>' onclick='this.closest(".full-screen-pdf-wrapper").classList.add("hidden");'>
                 <?php echo $close;?>
@@ -97,7 +97,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
                 <div class="loader-image-trigger"></div>
                 Loading PDF...
             </div>
-            <iframe loading="lazy" src='<?php echo $url;?>' style='<?php echo $objectStyle;?>' type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loader-wrapper').classList.add('hidden')"></iframe>
+            <iframe loading="lazy" src='<?php echo esc_url($url);?>' style='<?php echo $objectStyle;?>' type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loader-wrapper').classList.add('hidden')"></iframe>
         </div>
     </div>
     <?php
