@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- do not use wp_strip_all_tags
 
 ### Updated
 
