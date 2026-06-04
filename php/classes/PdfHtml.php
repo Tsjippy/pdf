@@ -1,12 +1,15 @@
 <?php
+
 namespace TSJIPPY\PDF;
+
 use TSJIPPY;
 
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
-class PdfHtml extends \FPDF{
+class PdfHtml extends \FPDF
+{
     //variables of html parser
     protected $b;
     protected $href;
@@ -25,17 +28,17 @@ class PdfHtml extends \FPDF{
     const MAX_WIDTH = 800;
     const MAX_HEIGHT = 500;
 
-    public function __construct($orientation='P', $unit='mm', $format='A4') {
+    public function __construct($orientation = 'P', $unit = 'mm', $format = 'A4')
+    {
         //Call parent constructor
-        parent::__construct($orientation,$unit,$format);
+        parent::__construct($orientation, $unit, $format);
         //Initialization
-        $this->href='';
-        $this->fontlist=array('arial', 'times', 'courier', 'helvetica', 'symbol');
-        $this->issetfont=false;
-        $this->issetcolor=false;
+        $this->href = '';
+        $this->fontlist = array('arial', 'times', 'courier', 'helvetica', 'symbol');
+        $this->issetfont = false;
+        $this->issetcolor = false;
         $this->headertitle = "";
         $this->skipFirstPage = true;
-
     }
 
     /**
@@ -46,7 +49,8 @@ class PdfHtml extends \FPDF{
      *
      * @return    array            The RGB array
      */
-    public function hex2dec($color = "#000000") {
+    public function hex2dec($color = "#000000")
+    {
         $r                 = substr($color, 1, 2);
         $red             = hexdec($r);
         $v                 = substr($color, 3, 2);
@@ -67,7 +71,8 @@ class PdfHtml extends \FPDF{
      *
      * @return    string            the text
      */
-    public function txtentities($html) {
+    public function txtentities($html)
+    {
         $trans = get_html_translation_table(HTML_ENTITIES);
         $trans = array_flip($trans);
         return strtr($html, $trans);
@@ -79,43 +84,44 @@ class PdfHtml extends \FPDF{
      * @param    string    $html    the html
      * @param    string    $parsed    reference to output var
      */
-    public function WriteHTML($html, &$parsed = null) {
+    public function WriteHTML($html, &$parsed = null)
+    {
         //HTML parser
         $html    = do_shortcode($html);
         $html    = strip_tags($html, "<b><li><u><i><a><img><p><br><strong><em><font><tr><blockquote>");
         $html    = str_replace("\n", ' ', $html);
         $a        = preg_split('/<(.*)>/U', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-        if ($parsed !== null && count($a) <2) {
+        if ($parsed !== null && count($a) < 2) {
             return false;
         }
 
-        foreach ($a as $i=>$e) {
+        foreach ($a as $i => $e) {
             //every even index is the text, odd is the tag
-            if ($i%2==0) {
+            if ($i % 2 == 0) {
                 //Text
                 if ($this->href) {
-                    $this->PutLink($this->href,$e);
-                }elseif ($parsed !== null) {
-                    $parsed.=stripslashes($this->txtentities($e));
-                }else{
-                    $this->Write(5,utf8_decode(stripslashes($this->txtentities($e))));
+                    $this->PutLink($this->href, $e);
+                } elseif ($parsed !== null) {
+                    $parsed .= stripslashes($this->txtentities($e));
+                } else {
+                    $this->Write(5, utf8_decode(stripslashes($this->txtentities($e))));
                 }
-            }else{
+            } else {
                 //Tag
-                if ($e[0]=='/') {
-                    $this->CloseTag(strtoupper(substr($e,1)));
-                }else{
+                if ($e[0] == '/') {
+                    $this->CloseTag(strtoupper(substr($e, 1)));
+                } else {
                     //Extract attributes
-                    $a2=explode(' ',$e);
-                    $tag=strtoupper(array_shift($a2));
-                    $attr=array();
+                    $a2 = explode(' ', $e);
+                    $tag = strtoupper(array_shift($a2));
+                    $attr = array();
                     foreach ($a2 as $v) {
-                        if (preg_match('/([^=]*)=["\']?([^"\']*)/',$v,$a3)) {
-                            $attr[strtoupper($a3[1])]=$a3[2];
+                        if (preg_match('/([^=]*)=["\']?([^"\']*)/', $v, $a3)) {
+                            $attr[strtoupper($a3[1])] = $a3[2];
                         }
                     }
-                    $this->OpenTag($tag,$attr);
+                    $this->OpenTag($tag, $attr);
                 }
             }
         }
@@ -128,8 +134,9 @@ class PdfHtml extends \FPDF{
      *
      * @return    float            The mm
      */
-    public function px2mm($px) {
-        return $px*25.4/72;
+    public function px2mm($px)
+    {
+        return $px * 25.4 / 72;
     }
 
     /**
@@ -138,22 +145,23 @@ class PdfHtml extends \FPDF{
      * @param    string    $tag    THe tag type
      * @param    array    $attr    The element attributes array
      */
-    public function OpenTag($tag, $attr) {
+    public function OpenTag($tag, $attr)
+    {
         //Opening tag
-        switch($tag) {
+        switch ($tag) {
             case 'STRONG':
-                $this->SetStyle('B',true);
+                $this->SetStyle('B', true);
                 break;
             case 'EM':
-                $this->SetStyle('I',true);
+                $this->SetStyle('I', true);
                 break;
             case 'B':
             case 'I':
             case 'U':
-                $this->SetStyle($tag,true);
+                $this->SetStyle($tag, true);
                 break;
             case 'A':
-                $this->href=$attr['HREF'];
+                $this->href = $attr['HREF'];
                 break;
             case 'IMG':
                 if (isset($attr['SRC']) && (isset($attr['WIDTH']) || isset($attr['HEIGHT']))) {
@@ -163,14 +171,14 @@ class PdfHtml extends \FPDF{
                     if (!isset($attr['HEIGHT'])) {
                         $attr['HEIGHT'] = 0;
                     }
-                    try{
+                    try {
                         $ext = strtoupper(pathinfo($attr['SRC'])['extension']);
                         if ($ext == 'JPE') {
                             $ext = 'JPG';
                         }
                         $this->printImage($attr['SRC'], $this->GetX(), $this->GetY(), $this->px2mm($attr['WIDTH']), $this->px2mm($attr['HEIGHT']));
-                        $this->SetY($this->GetY()+$this->px2mm($attr['HEIGHT'])+2);
-                    }catch (\Exception $e) {
+                        $this->SetY($this->GetY() + $this->px2mm($attr['HEIGHT']) + 2);
+                    } catch (\Exception $e) {
                         TSJIPPY\printArray($e);
                         TSJIPPY\printArray("{$attr['SRC']} is not a valid image");
                     }
@@ -185,21 +193,20 @@ class PdfHtml extends \FPDF{
                 $this->Ln(10);
                 break;
             case 'FONT':
-                if (isset($attr['COLOR']) && $attr['COLOR']!='') {
-                    $colour=$this->hex2dec($attr['COLOR']);
-                    $this->SetTextColor($colour['R'],$colour['G'],$colour['B']);
-                    $this->issetcolor=true;
+                if (isset($attr['COLOR']) && $attr['COLOR'] != '') {
+                    $colour = $this->hex2dec($attr['COLOR']);
+                    $this->SetTextColor($colour['R'], $colour['G'], $colour['B']);
+                    $this->issetcolor = true;
                 }
                 if (isset($attr['FACE']) && in_array(strtolower($attr['FACE']), $this->fontlist)) {
                     $this->SetFont(strtolower($attr['FACE']));
-                    $this->issetfont=true;
+                    $this->issetfont = true;
                 }
                 break;
             case 'LI':
                 $this->Ln(5);
-                $this->Write(5,chr(127). '   ');
+                $this->Write(5, chr(127) . '   ');
                 break;
-
         }
     }
 
@@ -208,42 +215,43 @@ class PdfHtml extends \FPDF{
      *
      * @param    string    $tag    The tag type
      */
-    public function CloseTag($tag) {
+    public function CloseTag($tag)
+    {
         //Closing tag
-        if ($tag=='STRONG') {
-            $tag='B';
+        if ($tag == 'STRONG') {
+            $tag = 'B';
         }
-        if ($tag=='EM') {
-            $tag='I';
+        if ($tag == 'EM') {
+            $tag = 'I';
         }
-        if ($tag=='B' || $tag=='I' || $tag=='U') {
-            $this->SetStyle($tag,false);
+        if ($tag == 'B' || $tag == 'I' || $tag == 'U') {
+            $this->SetStyle($tag, false);
         }
-        if ($tag=='A') {
-            $this->href='';
+        if ($tag == 'A') {
+            $this->href = '';
         }
-        if ($tag=='FONT') {
+        if ($tag == 'FONT') {
             if ($this->issetcolor) {
                 $this->SetTextColor(0);
             }
             if ($this->issetfont) {
                 $this->SetFont('arial');
-                $this->issetfont=false;
+                $this->issetfont = false;
             }
         }
     }
 
-    public function SetStyle($tag, $enable) {
+    public function SetStyle($tag, $enable)
+    {
         //Modify style and select corresponding font
-        $this->$tag+=($enable ? 1 : -1);
+        $this->$tag += ($enable ? 1 : -1);
         $style    = '';
-        foreach (array('B','I','U') as $s)
-        {
-            if ($this->$s>0) {
-                $style.=$s;
+        foreach (array('B', 'I', 'U') as $s) {
+            if ($this->$s > 0) {
+                $style .= $s;
             }
         }
-        $this->SetFont('',$style);
+        $this->SetFont('', $style);
     }
 
     /**
@@ -252,7 +260,8 @@ class PdfHtml extends \FPDF{
      * @param     string    $url    the url
      * @param    string    $text    the text to display
      */
-    public function PutLink($url, $txt) {
+    public function PutLink($url, $txt)
+    {
         //Put a hyperlink
         $this->SetTextColor(0, 0, 255);
         $this->SetStyle('U', true);
@@ -267,17 +276,18 @@ class PdfHtml extends \FPDF{
      * @param    string    $title
      * @param    string    $subtitle
      */
-    public function frontpage($title, $subtitle='') {
+    public function frontpage($title, $subtitle = '')
+    {
         //Set the title of the document
-        $this->SetTitle($title. " " .$subtitle);
+        $this->SetTitle($title . " " . $subtitle);
 
         $this->AddPage();
 
         //Add the logo to the page
         $logo    = get_attached_file(SETTINGS['picture-ids'] ?? []['logo']);
-        try{
-            $this->Image($logo, 70, 30, 70,0);
-        }catch (\Exception $e) {
+        try {
+            $this->Image($logo, 70, 30, 70, 0);
+        } catch (\Exception $e) {
             TSJIPPY\printArray("PDF_export.php: $logo is not a valid image");
         }
         $this->SetFont('Arial', '', 42);
@@ -291,11 +301,12 @@ class PdfHtml extends \FPDF{
         $this->SetXY(0, 100);
 
         //Write the subtitle
-        $this->Cell(0, 0, $subtitle,0,1,'C');
+        $this->Cell(0, 0, $subtitle, 0, 1, 'C');
     }
 
 
-    public function setHeaderTitle($title) {
+    public function setHeaderTitle($title)
+    {
         $this->headertitle = $title;
         return true;
     }
@@ -303,24 +314,25 @@ class PdfHtml extends \FPDF{
     /**
      * Page header
      */
-    public function Header() {
+    public function Header()
+    {
         if (!$this->skipFirstPage || $this->PageNo() != 1) {
             $logo    = get_attached_file(SETTINGS['picture-ids'] ?? []['logo']);
-            try{
+            try {
                 // Logo
                 $this->Image($logo, 10, 6, 30, 0, 'JPG');
-            }catch (\Exception $e) {
+            } catch (\Exception $e) {
                 TSJIPPY\printArray("PDF_HELPER_Functions.php: $logo is not a valid image");
             }
             // Arial bold 15
-            $this->SetFont('Arial','B',15);
+            $this->SetFont('Arial', 'B', 15);
             // Move to the right
             $this->Cell(80);
 
             // Title
             if ($this->headertitle == "") {
                 $this->Cell(30, 10, $this->metadata['Title'], 0, 0, 'C');
-            }else{
+            } else {
                 $this->Cell(30, 10, $this->headertitle, 0, 0, 'C');
             }
 
@@ -332,22 +344,24 @@ class PdfHtml extends \FPDF{
     /**
      * Page footer
      */
-    public function Footer() {
+    public function Footer()
+    {
         if ($this->PageNo() != 1) {
             // Position at 1.5 cm from bottom
             $this->SetY(-15);
             // Arial italic 8
-            $this->SetFont('Arial','I',8);
+            $this->SetFont('Arial', 'I', 8);
             // Page number, dont count the first page
-            $pageNumber = ($this->PageNo())-1;
-            $this->Cell(0, 10, 'Page ' .$pageNumber, 0, 0, 'C');
+            $pageNumber = ($this->PageNo()) - 1;
+            $this->Cell(0, 10, 'Page ' . $pageNumber, 0, 0, 'C');
         }
     }
 
     /**
      * Write page title
      */
-    public function PageTitle($title, $new = true, $height = 10) {
+    public function PageTitle($title, $new = true, $height = 10)
+    {
         if ($new) {
             $this->AddPage();
         }
@@ -356,7 +370,7 @@ class PdfHtml extends \FPDF{
         $this->Write($height, $title);
 
         // Add a line break
-        $this->Ln($height*1.5);
+        $this->Ln($height * 1.5);
         $this->SetFont('Arial', '', 12);
     }
 
@@ -367,7 +381,8 @@ class PdfHtml extends \FPDF{
      * @param    int        $depth        The nesting level of the list
      * @param    string    $prevKey    The name of the upper nesting list
      */
-    public function WriteArray($array, $depth=0, $prevKey="") {
+    public function WriteArray($array, $depth = 0, $prevKey = "")
+    {
         //Determine the bullet symbol
         switch ($depth) {
             case 0:
@@ -391,29 +406,29 @@ class PdfHtml extends \FPDF{
         }
 
         //Loop over the data
-        foreach ($array as $key=>$field) {
+        foreach ($array as $key => $field) {
             if (is_numeric($key)) {
-                $bullet = $key. ' .  ';
+                $bullet = $key . ' .  ';
             }
 
             if (is_array($field)) {
-                if ($depth==0) {
+                if ($depth == 0) {
                     $this->Ln(5);
                 }
 
                 if (is_numeric($key)) {
-                    $this->WriteHTML(str_repeat("   ", $depth). "<strong>$prevKey $key.</strong><br>");
-                }else{
-                    $this->WriteHTML(str_repeat("   ", $depth). "<strong>$key:</strong><br>");
+                    $this->WriteHTML(str_repeat("   ", $depth) . "<strong>$prevKey $key.</strong><br>");
+                } else {
+                    $this->WriteHTML(str_repeat("   ", $depth) . "<strong>$key:</strong><br>");
                 }
 
                 //Display this array as well
-                $this->WriteArray($field, $depth+1, $key);
-            }else{
+                $this->WriteArray($field, $depth + 1, $key);
+            } else {
                 if (is_numeric($key)) {
                     $showKey = "";
-                }else{
-                    $showKey = $key. ": ";
+                } else {
+                    $showKey = $key . ": ";
                 }
 
                 if (filter_var($field, FILTER_VALIDATE_URL)) {
@@ -421,7 +436,7 @@ class PdfHtml extends \FPDF{
                     $field    = basename($field);
                 }
 
-                $this->Write(5, str_repeat("   ", $depth).$bullet. ' ' .$showKey.$field, $url);
+                $this->Write(5, str_repeat("   ", $depth) . $bullet . ' ' . $showKey . $field, $url);
                 $this->Ln(5);
             }
         }
@@ -434,15 +449,16 @@ class PdfHtml extends \FPDF{
      * @param    int        $depth        The nesting level of the list
      * @param    string    $prevKey    The name of the upper nesting list
      */
-    public function WriteImageArray($array, $depth=0, $prevkey="") {
+    public function WriteImageArray($array, $depth = 0, $prevkey = "")
+    {
         //Do nothing if not an array
         if (is_array($array)) {
             //Loop over all the pictures
-            foreach ($array as $key=>$image) {
+            foreach ($array as $key => $image) {
                 //If the picture is an array of pictures run the function again
                 if (is_array($image)) {
-                    $this->WriteImageArray($image, $depth+1, $key);
-                }else{
+                    $this->WriteImageArray($image, $depth + 1, $key);
+                } else {
                     //Get the extension
                     $extension = strtoupper(explode(' . ', $image)[1]);
                     if (!empty($extension)) {
@@ -453,20 +469,20 @@ class PdfHtml extends \FPDF{
                         //Write the title of the image above the image
                         if (!is_numeric($prevkey) && !empty($prevkey) && $key == 0) {
                             $this->Ln(5);
-                            $this->WriteHTML("<strong>" .ucfirst($prevkey). "</strong><br>");
+                            $this->WriteHTML("<strong>" . ucfirst($prevkey) . "</strong><br>");
                         }
 
                         //Check the extension to see if it is printable and check if the file exists
-                        if (in_array($extension, ['JPG','JPEG','PNG','GIF'])) {
+                        if (in_array($extension, ['JPG', 'JPEG', 'PNG', 'GIF'])) {
                             if (file_exists($image)) {
                                 //Print the picture
-                                try{
+                                try {
                                     $this->Image($image, null, null, 100, 0,  $extension);
-                                }catch (\Exception $e) {
-                                    TSJIPPY\printArray($image. " is not a valid image");
+                                } catch (\Exception $e) {
+                                    TSJIPPY\printArray($image . " is not a valid image");
                                 }
                             }
-                        }else{
+                        } else {
                             if (is_string($image) && is_file($image)) {
                                 $image    = TSJIPPY\pathToUrl($image);
                             }
@@ -474,10 +490,10 @@ class PdfHtml extends \FPDF{
                             //Write down the url as link
                             $url    = $image;
                             if (!str_contains($url, site_url())) {
-                                $url    = site_url(). '/' .$url;
+                                $url    = site_url() . '/' . $url;
                             }
 
-                            $this->Write(10, chr(149). ' ' .explode('-', basename($image), 2)[1], $url);
+                            $this->Write(10, chr(149) . ' ' . explode('-', basename($image), 2)[1], $url);
                             $this->Ln(5);
                         }
                     }
@@ -486,7 +502,8 @@ class PdfHtml extends \FPDF{
         }
     }
 
-    public function pixelsToMM($val) {
+    public function pixelsToMM($val)
+    {
         return $val * self::MM_IN_INCH / self::DPI;
     }
 
@@ -498,7 +515,8 @@ class PdfHtml extends \FPDF{
      *
      * @return    array                Array of width and height
      */
-    public function resizeToFit($imgPath, $maxHeight=self::MAX_HEIGHT) {
+    public function resizeToFit($imgPath, $maxHeight = self::MAX_HEIGHT)
+    {
         if (!file_exists($imgPath)) {
             return false;
         }
@@ -515,7 +533,7 @@ class PdfHtml extends \FPDF{
         return array(
             round($this->pixelsToMM($scale * $width)),
             round($this->pixelsToMM($scale * $height))
-       );
+        );
     }
 
     /**
@@ -528,7 +546,8 @@ class PdfHtml extends \FPDF{
      *
      * @return    array|boolean        Array of width and height or false in case of error
      */
-    public function centreImage($path, $y, $maxHeight, $ext) {
+    public function centreImage($path, $y, $maxHeight, $ext)
+    {
         if (!file_exists($path)) {
             return false;
         }
@@ -544,7 +563,7 @@ class PdfHtml extends \FPDF{
             $width,
             $height,
             $ext
-       );
+        );
 
         return array($width, $height);
     }
@@ -560,8 +579,9 @@ class PdfHtml extends \FPDF{
      * @param    bool    $centre        Whether to center the image on the page. Default false
      * @param    bool    $adjustY    Whether to center vertically. Default false
      */
-    public function printImage($url, $x=-1, $y=-1, $width=100, $height=200, $centre=false, $adjustY = false) {
-        try{
+    public function printImage($url, $x = -1, $y = -1, $width = 100, $height = 200, $centre = false, $adjustY = false)
+    {
+        try {
             $path = TSJIPPY\urlToPath($url);
 
             if ($x == -1) {
@@ -583,29 +603,29 @@ class PdfHtml extends \FPDF{
             $ext = strtoupper(pathinfo($path)['extension']);
             if ($ext == 'JPE') {
                 $ext = 'JPG';
-            }elseif ($ext == 'webp') {
+            } elseif ($ext == 'webp') {
                 // create a temporay jpg file as webp is not supported by pdf
                 $im = imagecreatefromwebp($path);
 
                 // new source is jpg
-                $path    = get_temp_dir().str_replace(' .webp', ' .jpg', basename($path));
+                $path    = get_temp_dir() . str_replace(' .webp', ' .jpg', basename($path));
                 // Convert it to a jpeg file with 100% quality
                 imagejpeg($im, $path, 100);
                 imagedestroy($im);
             }
 
-             if ($centre) {
-                list($width, $height) = $this->centreImage($path,$y,$height,$ext);
-            }else{
-                $this->Image($path, $x, $y, $width, $height,$ext);
+            if ($centre) {
+                list($width, $height) = $this->centreImage($path, $y, $height, $ext);
+            } else {
+                $this->Image($path, $x, $y, $width, $height, $ext);
             }
 
             if ($adjustY) {
                 $y += $height;
             }
 
-            $this->setXY($x+$width, $y);
-        }catch (\Exception $e) {
+            $this->setXY($x + $width, $y);
+        } catch (\Exception $e) {
             TSJIPPY\printArray("PDF_export.php: $path is not a valid image");
         }
     }
@@ -616,27 +636,28 @@ class PdfHtml extends \FPDF{
      * @param    array    $headers    the headers
      * @param    array    $widths        The widths of each column
      */
-    public function tableHeaders($headers, $widths="") {
+    public function tableHeaders($headers, $widths = "")
+    {
         // Header colors, line width and bold font
         $this->SetFillColor(189, 41, 25);
         $this->SetTextColor(255);
-        $this->SetDrawColor(128,0,0);
+        $this->SetDrawColor(128, 0, 0);
         $this->SetLineWidth(.3);
-        $this->SetFont('Arial','B',12);
+        $this->SetFont('Arial', 'B', 12);
 
         // Header content
-        foreach ($headers as $key=>$header_text) {
+        foreach ($headers as $key => $header_text) {
             if (!is_array($widths) || !isset($widths[$key])) {
                 $width = 30;
-            }else{
+            } else {
                 $width = $widths[$key];
             }
-            $this->Cell($width,7,$header_text,1,0,'C',true);
+            $this->Cell($width, 7, $header_text, 1, 0, 'C', true);
         }
         $this->Ln();
 
         // Color and font restoration
-        $this->SetFillColor(224,235,255);
+        $this->SetFillColor(224, 235, 255);
         $this->SetTextColor(0);
         $this->SetFont('Arial', '', 8);
     }
@@ -649,14 +670,15 @@ class PdfHtml extends \FPDF{
      *
      * @return    string                The splited string
      */
-    public function splitOnWidth($string, $maxWidth) {
+    public function splitOnWidth($string, $maxWidth)
+    {
         // Get width of a string in the current font
         $cw         = &$this->CurrentFont['cw'];
         $w             = 0;
         $l             = strlen($string);
         $newString    = '';
-        for($i=0;$i<$l;$i++) {
-            if ((($w + $cw[$string[$i]]) * $this->FontSize/1000) > $maxWidth) {
+        for ($i = 0; $i < $l; $i++) {
+            if ((($w + $cw[$string[$i]]) * $this->FontSize / 1000) > $maxWidth) {
                 //add a space, as fpdf will use that to continue on a new line
                 $newString .= " ";
                 //reset length
@@ -675,7 +697,8 @@ class PdfHtml extends \FPDF{
         return $newString;
     }
 
-    function convertWebpToJpeg($source, $destination) {
+    function convertWebpToJpeg($source, $destination)
+    {
         // Check if the GD extension is installed and supports WebP
         if (!function_exists('imagecreatefromwebp')) {
             return false; // WebP support missing in GD
@@ -708,7 +731,8 @@ class PdfHtml extends \FPDF{
         return $result; // Returns true on success, false on error
     }
 
-    public function addCellPicture($filePath, $x=null, $y=null, $link='', $width=6, $reset=true) {
+    public function addCellPicture($filePath, $x = null, $y = null, $link = '', $width = 6, $reset = true)
+    {
         /**
          * Convert to valid images
          */
@@ -727,7 +751,7 @@ class PdfHtml extends \FPDF{
         }
 
         //Add the picture to the page
-        try{
+        try {
             if (!$x) {
                 $x    = $this->getX();
             }
@@ -739,12 +763,12 @@ class PdfHtml extends \FPDF{
             if ($reset) {
                 $x    = $x + 0.15;
                 $y    = $y + 0.15;
-            }else{
+            } else {
                 $y    = null; // needs to be set to null to get an updated Y value
             }
 
             $this->Image($filePath, $x, $y, $width, 0, '', $link);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             TSJIPPY\printArray("PDF_export.php: $filePath is not a valid image");
             //TSJIPPY\printArray($e);
         }
@@ -761,7 +785,8 @@ class PdfHtml extends \FPDF{
      *
      * @return    array            an array of cell heights
      */
-    private function getRowHeight($colWidths, $row) {
+    private function getRowHeight($colWidths, $row)
+    {
         $cellHeights    = [];
 
         //Calculate the height of this row
@@ -781,7 +806,7 @@ class PdfHtml extends \FPDF{
 
             if (is_array($cellText)) {
                 $orgLines     = $cellText;
-            }else{
+            } else {
                 $orgLines     = explode("\n", $cellText);
             }
             $orgLines        = TSJIPPY\cleanUpNestedArray($orgLines);
@@ -820,17 +845,18 @@ class PdfHtml extends \FPDF{
      * @param    bool    $fil        Whether to fill the row
      * @param    array    $header        The table headers
      */
-    public function writeTableRow($colWidths, $row, $fill, $header) {
+    public function writeTableRow($colWidths, $row, $fill, $header)
+    {
         $y                 = $this->GetY();
 
         $cellHeights    = $this->getRowHeight($colWidths, $row);
 
-        $rowHeight        = ceil(max($cellHeights)/6)*6;
+        $rowHeight        = ceil(max($cellHeights) / 6) * 6;
 
         //Check if we need to continue on a new page
         if ($this->y + $rowHeight * 6 > $this->h - 20) {
             //Draw the bottom line over the full width of the table
-            $this->Cell(array_sum($colWidths),0,'','T');
+            $this->Cell(array_sum($colWidths), 0, '', 'T');
 
             //Add new page
             $this->AddPage();
@@ -850,19 +876,19 @@ class PdfHtml extends \FPDF{
 
             if (is_array($cellText)) {
                 $orgLines    = $cellText;
-            }else{
+            } else {
                 $orgLines    = explode("\n", $cellText);
             }
             $orgLines        = TSJIPPY\cleanUpNestedArray($orgLines);
 
             $cellWidth = $colWidths[$colNr];
-            foreach ($orgLines as $l_nr=>$line) {
+            foreach ($orgLines as $l_nr => $line) {
                 //Stringlength
-                $length = $this->GetStringWidth($line)+2;
+                $length = $this->GetStringWidth($line) + 2;
 
                 //if we span multiple lines, makes sure each line has a space
                 if ($length > $cellWidth) {
-                    $orgLines[$l_nr]    = $this->splitOnWidth($line, $cellWidth-5);
+                    $orgLines[$l_nr]    = $this->splitOnWidth($line, $cellWidth - 5);
                 }
             }
 
@@ -872,7 +898,7 @@ class PdfHtml extends \FPDF{
 
             // add as many empty lines as needed to make the cell the required height
             if ($cellHeight < $rowHeight) {
-                $cellText = $cellText.str_repeat("\n ", ceil(($rowHeight - $cellHeight) / 6)); // each line is 6 units
+                $cellText = $cellText . str_repeat("\n ", ceil(($rowHeight - $cellHeight) / 6)); // each line is 6 units
             }
 
             //Get current position
@@ -882,7 +908,7 @@ class PdfHtml extends \FPDF{
             //Write the cell
             if ($fill) {
                 $this->SetTextColor(255, 255, 255);
-            }else{
+            } else {
                 $this->SetTextColor(0, 0, 0);
             }
             $this->Multicell($cellWidth, 6, $cellText, 'LTRB', 'C', $fill);
@@ -900,7 +926,8 @@ class PdfHtml extends \FPDF{
     /**
      * Print the pdf to screen
      */
-    public function printPdf($dest='', $name='', $isUTF8=false) {
+    public function printPdf($dest = '', $name = '', $isUTF8 = false)
+    {
         // CLear the complete queue
         TSJIPPY\clearOutput();
 
@@ -910,5 +937,4 @@ class PdfHtml extends \FPDF{
         exit;
         die();
     }
-
 }

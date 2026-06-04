@@ -1,8 +1,10 @@
 <?php
+
 namespace TSJIPPY\PDF;
+
 use TSJIPPY;
 
-if ( ! defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
     exit;
 }
 
@@ -11,7 +13,8 @@ if (!SETTINGS['pdf-print'] ?? false) {
     return;
 }
 
-function createPagePdf() {
+function createPagePdf()
+{
     global $post;
 
     $pdf = new PdfHtml();
@@ -45,18 +48,19 @@ add_filter('the_content', __NAMESPACE__ . '\printPdfButton');
  *
  * @return string The updated page content
  */
-function printPdfButton($content) {
+function printPdfButton($content)
+{
     //Print to screen if the button is clicked
-    if ( isset($_POST['print-as-pdf'])) {
+    if (isset($_POST['print-as-pdf'])) {
         createPagePdf();
     }
 
     //pdf button
-    if (!empty(get_post_meta(get_the_ID(), 'add-print-button',true))) {
+    if (!empty(get_post_meta(get_the_ID(), 'add-print-button', true))) {
         $content .= "<div class='print-as-pdf-div' style='float:right;'>";
-            $content .= "<form method='post' id='print-as-pdf_form'>";
-                $content .= "<button type='submit' class='button' name='print-as-pdf'>Print this page</button>";
-            $content .= "</form>";
+        $content .= "<form method='post' id='print-as-pdf_form'>";
+        $content .= "<button type='submit' class='button' name='print-as-pdf'>Print this page</button>";
+        $content .= "</form>";
         $content .= "</div>";
     }
 
@@ -72,16 +76,19 @@ add_action('tsjippy_page_specific_fields', __NAMESPACE__ . '\pageSpecificFields'
  *
  * @return void
  */
-function pageSpecificFields($postId) {
-    ?>
+function pageSpecificFields($postId)
+{
+?>
     <div id="add-print-button-div" class="frontend-form">
         <h4>PDF button</h4>
         <label>
-            <input type='checkbox'  name='add-print-button' value='1' <?php if (!empty(get_post_meta($postId, 'add-print-button', true))) {echo 'checked';}?>>
+            <input type='checkbox' name='add-print-button' value='1' <?php if (!empty(get_post_meta($postId, 'add-print-button', true))) {
+                                                                            echo 'checked';
+                                                                        } ?>>
             Add a 'Save as PDF' button
         </label>
     </div>
-    <?php
+<?php
 }
 
 // Save the option to have a pdf button
@@ -93,17 +100,18 @@ add_action('tsjippy_after_post_save', __NAMESPACE__ . '\afterPostSave');
  *
  * @return void
  */
-function afterPostSave($post) {
+function afterPostSave($post)
+{
     //PDF button
     if (isset($_POST['add-print-button'])) {
         //Store pdf button
         if (empty($_POST['add-print-button'])) {
             $value = false;
-        }else{
+        } else {
             $value = true;
         }
         update_post_meta($post->ID, 'add-print-button', $value);
-    }else{
+    } else {
         delete_post_meta($post->ID, 'add-print-button');
     }
 }
@@ -119,7 +127,8 @@ add_filter('tsjippy-single-template-bottom', __NAMESPACE__ . '\singleTemplateBot
  *
  * @return string The HTML content with the print to PDF button
  */
-function singleTemplateBottom($html, $postType) {
+function singleTemplateBottom($html, $postType)
+{
     return "<div class='print-as-pdf-div'>
         <form method='post' id='print-as-pdf_form'>
             <button type='submit' class='button' name='print-as-pdf' id='print-as-pdf' style='margin-left: 10px;'>Print this $postType</button>
