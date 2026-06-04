@@ -3,28 +3,28 @@ namespace TSJIPPY\PDF;
 
 use function TSJIPPY\addElement;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if ( ! defined('ABSPATH')) {
+    exit;
 }
 
 class AdminMenu extends \TSJIPPY\ADMIN\SubAdminMenu{
 
     /**
      * AdminMenu constructor.
-     * 
+     *
      * @param array $settings The settings for the plugin
      * @param string $name The name of the plugin
      */
-    public function __construct($settings, $name){
+    public function __construct($settings, $name) {
         parent::__construct($settings, $name);
     }
 
-    public function settings($parent){
+    public function settings($parent) {
 
         $label = addElement('label', $parent, [], 'Show PDF documents full screen if that is the only page content');
 
         $attributes = ['type' => 'checkbox', 'name' => 'full-screen'];
-        if(isset($this->settings['full-screen'])){
+        if (isset($this->settings['full-screen'])) {
             $attributes['checked'] = 'checked';
         }
 
@@ -36,7 +36,7 @@ class AdminMenu extends \TSJIPPY\ADMIN\SubAdminMenu{
         $label = addElement('label', $parent, [], 'Add a "Print to PDF" button option to posts');
 
         $attributes = ['type' => 'checkbox', 'name' => 'pdf-print'];
-        if(isset($this->settings['pdf-print'])){
+        if (isset($this->settings['pdf-print'])) {
             $attributes['checked'] = 'checked';
         }
         addElement('input', $label, $attributes, '', 'afterBegin');
@@ -49,16 +49,16 @@ class AdminMenu extends \TSJIPPY\ADMIN\SubAdminMenu{
         return true;
     }
 
-    public function emails($parent){
+    public function emails($parent) {
         return false;
     }
 
-    public function data($parent=''){
+    public function data($parent='') {
 
         return false;
     }
 
-    public function functions($parent){
+    public function functions($parent) {
 
         return false;
     }

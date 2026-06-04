@@ -2,24 +2,24 @@
 namespace TSJIPPY\PDF;
 use TSJIPPY;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if ( ! defined('ABSPATH')) {
+    exit;
 }
 
 //only load when checked
-if(!SETTINGS['full-screen'] ?? false){
+if (!SETTINGS['full-screen'] ?? false) {
     return;
 }
 
-function checkIfOnlyPdf($content){
+function checkIfOnlyPdf($content) {
     //If the string starts with 0 or more spaces, then a <p> followed by a hyperlink ending in .pdf then the download text ending an optional download button followed with 0 or more spaces.
     $pattern = '/^\s*<p><a href="(.*?\.pdf)">([^<]*)<\/a>(.*\.pdf">Download<\/a>)?<\/p>\s*$/i';
-    
+
     //Execute the regex
     preg_match($pattern, $content, $matches);
 
     //If an url exists it means there is only one pdf on this page
-    if(isset($matches[2])){
+    if (isset($matches[2])) {
         return $matches;
     }
 
@@ -27,43 +27,43 @@ function checkIfOnlyPdf($content){
 }
 
 //Show PDFs full screen
-//add_filter( 'the_content',  __NAMESPACE__.'\showFullScreen', 90);
-function showFullScreen( $content ) {
-    $postId 	= get_the_ID();
-    $content	= str_replace('<p>&nbsp;</p>', '', $content);
+//add_filter('the_content',  __NAMESPACE__ . '\showFullScreen', 90);
+function showFullScreen($content) {
+    $postId     = get_the_ID();
+    $content    = str_replace('<p>&nbsp;</p>', '', $content);
 
     $matches    = checkIfOnlyPdf($content);
-    
+
     //If an url exists it means there is only a pdf on this page
-    if($matches){
+    if ($matches) {
         do_action('tsjippy-pdf-before-fullscreen', $postId);
 
         //Get the url to the pdf
         $url        = $matches[1];
         $exploded   = explode("/", $matches[2]);
-        $text       = str_replace('-', ' ', explode('.', end($exploded))[0]);
+        $text       = str_replace('-', ' ', explode(' . ', end($exploded))[0]);
 
         replaceAnchorWithContainer($content, $matches[0], $url, $text);
     }else{
         # Find any anchor who's href attribute starts with http(s):// and ends with .pdf
         preg_match_all("/<a[^>]*href=(?:\"|')(https{0,1}:\/\/[^'\"]*\.pdf)(?:\"|').*>(.*)<\/a>/iU", $content, $anchors);
 
-        foreach($anchors[0] as $index => $raw){
+        foreach ($anchors[0] as $index => $raw) {
             replaceAnchorWithContainer($content, $raw, $anchors[1][$index], $anchors[2][$index], true);
         }
     }
-	
-	return $content;
+
+    return $content;
 }
 
-function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
+function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden='') {
 
-    if(!empty($hidden)){
+    if (!empty($hidden)) {
         $class  = 'hidden';
     }
 
     /* SHOW THE PDF FULLSCREEN AND SHOW A CLOSE BUTTON */
-    if(wp_is_mobile()){
+    if (wp_is_mobile()) {
         $style          = "left: 90%; top: 13px;";
         $close          = "X";
         $objectStyle    = "min-width: 100vw;";
@@ -76,12 +76,12 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
     $id                 = strtolower(str_replace(' ', '-', $text));
     // The button
     ob_start();
-    ?> 
+    ?>
         <div>
             <button class='button small pdf-fullscreen' type="button" style='margin-top:10px;' data-target="<?php echo esc_attr($id);?>">Show <?php echo esc_attr($text);?></button>
         </div>
     <?php
-    
+
     // Replace the url with a button
     $content    = str_replace($raw, ob_get_clean(), $content);
 
@@ -90,27 +90,27 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden=''){
     ?>
     <div data-id="<?php echo esc_attr($id);?>" class='full-screen-pdf-wrapper <?php echo esc_attr($class);?>' style='z-index: 9999999;position: absolute;top: 0;left: 0;'>
         <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:-webkit-fill-available; min-height:100vh; background-color: white;margin-top: -33px;' >
-            <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style;?>' onclick='this.closest(".full-screen-pdf-wrapper").classList.add("hidden");'>
+            <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style;?>' onclick='this.closest(" .full-screen-pdf-wrapper").classList.add("hidden");'>
                 <?php echo $close;?>
             </button>
             <div class='loader-wrapper' style='display: flex;justify-content: center;align-items: center;height: 100vh;'>
                 <div class="loader-image-trigger"></div>
                 Loading PDF...
             </div>
-            <iframe loading="lazy" src='<?php echo esc_url($url);?>' style='<?php echo $objectStyle;?>' type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loader-wrapper').classList.add('hidden')"></iframe>
+            <iframe loading="lazy" src='<?php echo esc_url($url);?>' style='<?php echo $objectStyle;?>' type='application/pdf' onload="this.closest(' .full-screen-pdf-wrapper').querySelector(' .loader-wrapper').classList.add('hidden')"></iframe>
         </div>
     </div>
     <?php
-    
+
     $content    = ob_get_clean().$content;
 }
 
 // add url to signal message
-add_filter('tsjippy_signal_post_notification_message', __NAMESPACE__.'\postNotification', 10, 2);
-function postNotification( $excerpt, $post){
+add_filter('tsjippy_signal_post_notification_message', __NAMESPACE__ . '\postNotification', 10, 2);
+function postNotification($excerpt, $post) {
     // if this is a fullscreen pdf always return the url
-    if(checkIfOnlyPdf($post->post_content)){
-        return $excerpt."\n\n".get_permalink($post);
+    if (checkIfOnlyPdf($post->post_content)) {
+        return $excerpt. "\n\n" .get_permalink($post);
     }
 
     return $excerpt;
