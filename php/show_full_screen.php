@@ -95,14 +95,14 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden = '')
     ?>
     <div data-id="<?php echo esc_attr($id); ?>" class='full-screen-pdf-wrapper <?php echo esc_attr($class); ?>' style='z-index: 9999999;position: absolute;top: 0;left: 0;'>
         <div style='position: absolute; top: 0; left: 0; z-index: 99991; width:100vw; height:-webkit-fill-available; min-height:100vh; background-color: white;margin-top: -33px;'>
-            <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style; ?>' onclick='this.closest(" .full-screen-pdf-wrapper").classList.add("hidden");'>
+            <button type='button' id='close-full-screen' class='button small' style='position: sticky; z-index: 99992; <?php echo $style; ?>' onclick='this.closest(".full-screen-pdf-wrapper").classList.add("hidden");'>
                 <?php echo $close; ?>
             </button>
             <div class='loader-wrapper' style='display: flex;justify-content: center;align-items: center;height: 100vh;'>
                 <div class="loader-image-trigger"></div>
                 Loading PDF...
             </div>
-            <iframe loading="lazy" src='<?php echo esc_url($url); ?>' style='<?php echo $objectStyle; ?>' type='application/pdf' onload="this.closest(' .full-screen-pdf-wrapper').querySelector(' .loader-wrapper').classList.add('hidden')"></iframe>
+            <iframe loading="lazy" src='<?php echo esc_url($url); ?>' style='<?php echo $objectStyle; ?>' type='application/pdf' onload="this.closest('.full-screen-pdf-wrapper').querySelector('.loader-wrapper').classList.add('hidden')"></iframe>
         </div>
     </div>
 <?php

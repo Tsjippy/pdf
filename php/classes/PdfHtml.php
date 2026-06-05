@@ -608,7 +608,7 @@ class PdfHtml extends \FPDF
                 $im = imagecreatefromwebp($path);
 
                 // new source is jpg
-                $path    = get_temp_dir() . str_replace(' .webp', ' .jpg', basename($path));
+                $path    = get_temp_dir() . str_replace('.webp', '.jpg', basename($path));
                 // Convert it to a jpeg file with 100% quality
                 imagejpeg($im, $path, 100);
                 imagedestroy($im);
