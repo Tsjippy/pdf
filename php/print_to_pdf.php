@@ -135,3 +135,10 @@ function singleTemplateBottom($html, $postType)
         </form>
     </div>";
 }
+
+
+add_action('tsjippy-forms-results-table-footer', function($formWrapper, $object){
+    $form   = TSJIPPY\addElement('form', $formWrapper, [ 'method' => "post", 'class' => "export-form", 'id' => "export-pdf"]);
+
+    TSJIPPY\addElement('button', $form, ['class' => "button button-primary", 'type' => "submit", 'name' => "export-pdf"], 'Export data to pdf');
+}, 10, 2);
