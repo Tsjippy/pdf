@@ -3,6 +3,7 @@
 
 ### Added
 - shared functionality loader
+- action for tsjippy-forms-results-table-footer
 
 ### Changed
 - comply to coding standards
