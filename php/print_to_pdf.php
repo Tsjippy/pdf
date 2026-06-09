@@ -82,7 +82,7 @@ function pageSpecificFields($postId)
     <div id="add-print-button-div" class="frontend-form">
         <h4>PDF button</h4>
         <label>
-            <input type='checkbox' name='add-print-button' value='1' <?php if (!empty(get_post_meta($postId, 'add-print-button', true))) {
+            <input type='checkbox' name='add-print-button' value='1' <?php if (!empty(get_post_meta($postId, 'tsjippy_add-print-button', true))) {
                                                                             echo 'checked';
                                                                         } ?>>
             Add a 'Save as PDF' button
@@ -110,9 +110,9 @@ function afterPostSave($post)
         } else {
             $value = true;
         }
-        update_post_meta($post->ID, 'add-print-button', $value);
+        update_post_meta($post->ID, 'tsjippy_add-print-button', $value);
     } else {
-        delete_post_meta($post->ID, 'add-print-button');
+        delete_post_meta($post->ID, 'tsjippy_add-print-button');
     }
 }
 
