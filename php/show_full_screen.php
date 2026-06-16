@@ -111,7 +111,7 @@ function replaceAnchorWithContainer(&$content, $raw, $url, $text, $hidden = '')
 }
 
 // add url to signal message
-add_filter('tsjippy_signal_post_notification_message', __NAMESPACE__ . '\postNotification', 10, 2);
+add_filter('tsjippy-signal-post-notification-message', __NAMESPACE__ . '\postNotification', 10, 2);
 function postNotification($excerpt, $post)
 {
     // if this is a fullscreen pdf always return the url

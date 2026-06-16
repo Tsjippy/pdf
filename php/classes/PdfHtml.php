@@ -798,7 +798,7 @@ class PdfHtml extends \FPDF
             $temp->AddPage();
             $before     = $temp->getY();
 
-            $cellText    = apply_filters('tsjippy_before_pdf_text', $cellText, $temp);
+            $cellText    = apply_filters('tsjippy-before-pdf-text', $cellText, $temp);
 
             $height        = $temp->getY() - $before;
 
@@ -826,7 +826,7 @@ class PdfHtml extends \FPDF
 
             $before     = $temp->getY();
 
-            do_action('tsjippy_after_pdf_text', $row[$colNr], $temp, $x, $y, $cellWidth, false);
+            do_action('tsjippy-after-pdf-text', $row[$colNr], $temp, $x, $y, $cellWidth, false);
 
             $after         = $temp->getY();
 
@@ -872,7 +872,7 @@ class PdfHtml extends \FPDF
         foreach ($row as $colNr => $cellText) {
             $cellText    = str_replace('\\', '/', $cellText);
 
-            $cellText    = apply_filters('tsjippy_before_pdf_text', $cellText, $this);
+            $cellText    = apply_filters('tsjippy-before-pdf-text', $cellText, $this);
 
             if (is_array($cellText)) {
                 $orgLines    = $cellText;
@@ -913,7 +913,7 @@ class PdfHtml extends \FPDF
             }
             $this->Multicell($cellWidth, 6, $cellText, 'LTRB', 'C', $fill);
 
-            do_action('tsjippy_after_pdf_text', $row[$colNr], $this, $x, $y, $cellWidth, true);
+            do_action('tsjippy-after-pdf-text', $row[$colNr], $this, $x, $y, $cellWidth, true);
 
             //Move cursor to the next cell if not the last cell
             if ($colNr != $lastKey) {

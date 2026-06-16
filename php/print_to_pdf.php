@@ -68,7 +68,7 @@ function printPdfButton($content)
 }
 
 // Add fields to frontend content form
-add_action('tsjippy_page_specific_fields', __NAMESPACE__ . '\pageSpecificFields');
+add_action('tsjippy-page-specific-fields', __NAMESPACE__ . '\pageSpecificFields');
 /**
  * Adds the fields for the print to PDF button to the frontend content form
  *
@@ -92,7 +92,7 @@ function pageSpecificFields($postId)
 }
 
 // Save the option to have a pdf button
-add_action('tsjippy_after_post_save', __NAMESPACE__ . '\afterPostSave');
+add_action('tsjippy-after-post-save', __NAMESPACE__ . '\afterPostSave');
 /**
  * Saves the option to have a print to PDF button
  *
