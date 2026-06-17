@@ -27,11 +27,11 @@ function createPagePdf()
     $pdf->skipFirstPage = false;
     $pdf->Header();
 
-    do_action('tsjippy-before-print-content', $post, $pdf);
+    do_action('tsjippy-pdf-before-print-content', $post, $pdf);
 
     $pdf->WriteHTML($post->post_content);
 
-    do_action('tsjippy-after-print-content', $post, $pdf);
+    do_action('tsjippy-pdf-after-print-content', $post, $pdf);
 
     $pdf->printpdf();
 }
@@ -68,7 +68,7 @@ function printPdfButton($content)
 }
 
 // Add fields to frontend content form
-add_action('tsjippy-page-specific-fields', __NAMESPACE__ . '\pageSpecificFields');
+add_action('ttsjippy-frontend-content-page-specific-fields', __NAMESPACE__ . '\pageSpecificFields');
 /**
  * Adds the fields for the print to PDF button to the frontend content form
  *
@@ -92,7 +92,7 @@ function pageSpecificFields($postId)
 }
 
 // Save the option to have a pdf button
-add_action('tsjippy-after-post-save', __NAMESPACE__ . '\afterPostSave');
+add_action('tsjippy-frontend-content-after-post-save', __NAMESPACE__ . '\afterPostSave');
 /**
  * Saves the option to have a print to PDF button
  *
