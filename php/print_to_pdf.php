@@ -82,9 +82,13 @@ function pageSpecificFields($postId)
     <div id="add-print-button-div" class="frontend-form">
         <h4>PDF button</h4>
         <label>
-            <input type='checkbox' name='add-print-button' value='1' <?php if (!empty(get_post_meta($postId, 'tsjippy_add-print-button', true))) {
-                                                                            echo 'checked';
-                                                                        } ?>>
+            <input
+                type='checkbox'
+                name='add-print-button'
+                value='1'
+                <?php if (!empty(get_post_meta($postId, 'tsjippy_add-print-button', true))) {
+                    echo 'checked';
+                } ?>>
             Add a 'Save as PDF' button
         </label>
     </div>
@@ -92,7 +96,14 @@ function pageSpecificFields($postId)
 }
 
 // Save the option to have a pdf button
-add_action('tsjippy-frontend-content-after-post-save', __NAMESPACE__ . '\afterPostSave');
+/**
+ * Allow comments
+ * 
+ * @param   \WP_Post    $post       The new or updated post
+ * @param   object      $object     FrontEndContent Instance
+ * @param   array       $request    The sanitized request data
+ */
+add_action('tsjippy-frontend-content-after-post-save', __NAMESPACE__ . '\afterPostSave', 10, 3);
 /**
  * Saves the option to have a print to PDF button
  *
@@ -100,12 +111,12 @@ add_action('tsjippy-frontend-content-after-post-save', __NAMESPACE__ . '\afterPo
  *
  * @return void
  */
-function afterPostSave($post)
+function afterPostSave($post, $object, $request)
 {
     //PDF button
-    if (isset($_POST['add-print-button'])) {
+    if (isset($request['add-print-button'])) {
         //Store pdf button
-        if (empty($_POST['add-print-button'])) {
+        if (empty($request['add-print-button'])) {
             $value = false;
         } else {
             $value = true;
@@ -137,8 +148,8 @@ function singleTemplateBottom($html, $postType)
 }
 
 
-add_action('tsjippy-forms-results-table-footer', function($formWrapper, $object){
-    $form   = TSJIPPY\addElement('form', $formWrapper, [ 'method' => "post", 'class' => "export-form", 'id' => "export-pdf"]);
+add_action('tsjippy-forms-results-table-footer', function ($formWrapper, $object) {
+    $form   = TSJIPPY\addElement('form', $formWrapper, ['method' => "post", 'class' => "export-form", 'id' => "export-pdf"]);
 
     TSJIPPY\addElement('button', $form, ['class' => "button button-primary", 'type' => "submit", 'name' => "export-pdf"], 'Export data to pdf');
 }, 10, 2);
