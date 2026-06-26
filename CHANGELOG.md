@@ -7,6 +7,7 @@
 - pass sanitized request to tsjippy-frontend-content-after-post-save
 
 ### Fixed
+- non-prefixd post meta's
 
 ### Updated
 
