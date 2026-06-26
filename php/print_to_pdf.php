@@ -86,9 +86,7 @@ function pageSpecificFields($postId)
                 type='checkbox'
                 name='add-print-button'
                 value='1'
-                <?php if (!empty(get_post_meta($postId, 'tsjippy_add-print-button', true))) {
-                    echo 'checked';
-                } ?>>
+                <?php if (!empty(get_post_meta($postId, 'tsjippy_add-print-button', true))) echo 'checked'; ?>>
             Add a 'Save as PDF' button
         </label>
     </div>
