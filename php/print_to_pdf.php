@@ -56,7 +56,7 @@ function printPdfButton($content)
     }
 
     //pdf button
-    if (!empty(get_post_meta(get_the_ID(), 'add-print-button', true))) {
+    if (!empty(get_post_meta(get_the_ID(), "tsjippy_add-print-button", true))) {
         $content .= "<div class='print-as-pdf-div' style='float:right;'>";
         $content .= "<form method='post' id='print-as-pdf_form'>";
         $content .= "<button type='submit' class='button' name='print-as-pdf'>Print this page</button>";
