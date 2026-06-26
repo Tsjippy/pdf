@@ -4,12 +4,19 @@
 ### Added
 
 ### Changed
+
+### Fixed
+
+### Updated
+
+## [10.2.4] - 2026-06-26
+
+
+### Changed
 - pass sanitized request to tsjippy-frontend-content-after-post-save
 
 ### Fixed
 - non-prefixd post meta's
-
-### Updated
 
 ## [10.2.3] - 2026-06-25
 
