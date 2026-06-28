@@ -34,7 +34,7 @@ class PdfHtml extends \FPDF
         parent::__construct($orientation, $unit, $format);
         //Initialization
         $this->href = '';
-        $this->fontlist = array('arial', 'times', 'courier', 'helvetica', 'symbol');
+        $this->fontlist = array('arial' => 1, 'times' => 1, 'courier' => 1, 'helvetica' => 1, 'symbol' => 1);
         $this->issetfont = false;
         $this->issetcolor = false;
         $this->headertitle = "";
@@ -198,7 +198,7 @@ class PdfHtml extends \FPDF
                     $this->SetTextColor($colour['R'], $colour['G'], $colour['B']);
                     $this->issetcolor = true;
                 }
-                if (isset($attr['FACE']) && in_array(strtolower($attr['FACE']), $this->fontlist)) {
+                if (isset($this->fontlist[strtolower($attr['FACE'] ?? '')])) {
                     $this->SetFont(strtolower($attr['FACE']));
                     $this->issetfont = true;
                 }
@@ -473,7 +473,7 @@ class PdfHtml extends \FPDF
                         }
 
                         //Check the extension to see if it is printable and check if the file exists
-                        if (in_array($extension, ['JPG', 'JPEG', 'PNG', 'GIF'])) {
+                        if (isset(['JPG' => 1, 'JPEG' => 1, 'PNG' => 1, 'GIF' => 1][$extension])) {
                             if (file_exists($image)) {
                                 //Print the picture
                                 try {
@@ -738,7 +738,7 @@ class PdfHtml extends \FPDF
          */
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
 
-        if (in_array($extension, ['webp'])) {
+        if ($extension == 'webp') {
             $destination    = str_replace($extension, 'jpg', $filePath);
 
             if ($this->convertWebpToJpeg($filePath, $destination)) {
