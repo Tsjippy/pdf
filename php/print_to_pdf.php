@@ -80,7 +80,9 @@ function pageSpecificFields($postId)
 {
 ?>
     <div id="add-print-button-div" class="frontend-form">
-        <h4>PDF button</h4>
+        <h4>
+            PDF button
+        </h4>
         <label>
             <input
                 type='checkbox'
