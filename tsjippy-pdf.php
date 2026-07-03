@@ -5,7 +5,7 @@ namespace TSJIPPY\PDF;
 /**
  * Plugin Name:          Tsjippy PDF
  * Description:          This plugin
- * Version:              10.2.6
+ * Version:              10.2.7
  * Author:               Ewald Harmsen
  * AuthorURI:            harmseninnigeria.nl
  * Requires at least:    6.3
