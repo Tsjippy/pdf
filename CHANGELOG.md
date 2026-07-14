@@ -4,11 +4,16 @@
 ### Added
 
 ### Changed
-- pdf row fill color
 
 ### Fixed
 
 ### Updated
+
+## [10.3.9] - 2026-07-14
+
+
+### Changed
+- pdf row fill color
 
 ## [10.3.8] - 2026-07-14
 
