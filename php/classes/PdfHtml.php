@@ -684,7 +684,8 @@ class PdfHtml extends \FPDF
         $this->Ln();
 
         // Color and font restoration
-        $this->SetFillColor(224, 235, 255);
+        //$this->SetFillColor(224, 235, 255); // rgb values
+        $this->SetFillColor(200); // light grey, grey scale
         $this->SetTextColor(0);
         $this->SetFont('Arial', '', 8);
     }
@@ -868,18 +869,18 @@ class PdfHtml extends \FPDF
     /**
      * Write a row of a table
      *
-     * @param    array    $colWidths    the column widths
-     * @param    array    $row        The row data
-     * @param    bool    $fil        Whether to fill the row
-     * @param    array    $header        The table headers
+     * @param    array    $colWidths   The column widths
+     * @param    array    $row         The row data
+     * @param    bool     $fill        Whether to fill the row
+     * @param    array    $header      The table headers
      */
     public function writeTableRow($colWidths, $row, $fill, $header)
     {
-        $y                 = $this->GetY();
+        $y              = $this->GetY();
 
         $cellHeights    = $this->getRowHeight($colWidths, $row);
 
-        $rowHeight        = ceil(max($cellHeights) / 6) * 6;
+        $rowHeight      = ceil(max($cellHeights) / 6) * 6;
 
         //Check if we need to continue on a new page
         if ($this->y + $rowHeight * 6 > $this->h - 20) {
@@ -930,13 +931,15 @@ class PdfHtml extends \FPDF
             }
 
             //Get current position
-            $x     = $this->GetX();
+            $x    = $this->GetX();
             $y    = $this->GetY();
 
             //Write the cell
             if ($fill) {
+                // White
                 $this->SetTextColor(255, 255, 255);
             } else {
+                // Black
                 $this->SetTextColor(0, 0, 0);
             }
             $this->Multicell($cellWidth, 6, $cellText, 'LTRB', 'C', $fill);
