@@ -28,10 +28,18 @@ class PdfHtml extends \FPDF
     const MAX_WIDTH = 800;
     const MAX_HEIGHT = 500;
 
+    /**
+     * Constructor
+     * 
+     * @param   string  $orientation    P for Portret or L for landscape Default P
+     * @param   string  $unit           On of mm, pt, cm or in. Default mm.
+     * @param   string  $format         Page size. Default A4
+     */
     public function __construct($orientation = 'P', $unit = 'mm', $format = 'A4')
     {
         //Call parent constructor
         parent::__construct($orientation, $unit, $format);
+
         //Initialization
         $this->href = '';
         $this->fontlist = array('arial' => 1, 'times' => 1, 'courier' => 1, 'helvetica' => 1, 'symbol' => 1);
@@ -51,11 +59,11 @@ class PdfHtml extends \FPDF
      */
     public function hex2dec($color = "#000000")
     {
-        $r                 = substr($color, 1, 2);
-        $red             = hexdec($r);
-        $v                 = substr($color, 3, 2);
-        $green             = hexdec($v);
-        $b                 = substr($color, 5, 2);
+        $r                = substr($color, 1, 2);
+        $red              = hexdec($r);
+        $v                = substr($color, 3, 2);
+        $green            = hexdec($v);
+        $b                = substr($color, 5, 2);
         $blue             = hexdec($b);
         $tblColor         = array();
         $tblColor['R']    = $red;
@@ -241,6 +249,12 @@ class PdfHtml extends \FPDF
         }
     }
 
+    /**
+     * Set font style
+     * 
+     * @param string $tag
+     * @param bool   $enable
+     */
     public function SetStyle($tag, $enable)
     {
         //Modify style and select corresponding font
@@ -257,8 +271,8 @@ class PdfHtml extends \FPDF
     /**
      * Write a hyperlink to pdf
      *
-     * @param     string    $url    the url
-     * @param    string    $text    the text to display
+     * @param     string   $url    the url
+     * @param    string    $txt    the text to display
      */
     public function PutLink($url, $txt)
     {
@@ -284,7 +298,7 @@ class PdfHtml extends \FPDF
         $this->AddPage();
 
         //Add the logo to the page
-        $logo    = get_attached_file(SETTINGS['picture-ids'] ?? []['logo']);
+        $logo    = get_attached_file((SETTINGS['picture-ids'] ?? [])['logo']);
         try {
             $this->Image($logo, 70, 30, 70, 0);
         } catch (\Exception $e) {
@@ -304,7 +318,11 @@ class PdfHtml extends \FPDF
         $this->Cell(0, 0, $subtitle, 0, 1, 'C');
     }
 
-
+    /**
+     * Sets the page title
+     * 
+     * @param   string  $title  The header title
+     */
     public function setHeaderTitle($title)
     {
         $this->headertitle = $title;
@@ -317,7 +335,7 @@ class PdfHtml extends \FPDF
     public function Header()
     {
         if (!$this->skipFirstPage || $this->PageNo() != 1) {
-            $logo    = get_attached_file(SETTINGS['picture-ids'] ?? []['logo']);
+            $logo    = get_attached_file((SETTINGS['picture-ids'] ?? [])['logo']);
             try {
                 // Logo
                 $this->Image($logo, 10, 6, 30, 0, 'JPG');
@@ -359,6 +377,10 @@ class PdfHtml extends \FPDF
 
     /**
      * Write page title
+     * 
+     * @param   string  $title
+     * @param   bool    $new
+     * @param   int     $height
      */
     public function PageTitle($title, $new = true, $height = 10)
     {
@@ -445,9 +467,9 @@ class PdfHtml extends \FPDF
     /**
      * Write an array of pictures to pdf as list
      *
-     * @param    array    $array        The array to write
-     * @param    int        $depth        The nesting level of the list
-     * @param    string    $prevKey    The name of the upper nesting list
+     * @param    array    $array      The array to write
+     * @param    int      $depth      The nesting level of the list
+     * @param    string   $prevkey    The name of the upper nesting list
      */
     public function WriteImageArray($array, $depth = 0, $prevkey = "")
     {
@@ -502,6 +524,11 @@ class PdfHtml extends \FPDF
         }
     }
 
+    /**
+     * Converts pixels to mm
+     * 
+     * @param   int $val
+     */
     public function pixelsToMM($val)
     {
         return $val * self::MM_IN_INCH / self::DPI;
@@ -697,6 +724,12 @@ class PdfHtml extends \FPDF
         return $newString;
     }
 
+    /**
+     * Converts a webp image to jpeg
+     * 
+     * @param   string  $source         path of the webp image
+     * @param   string  $destination    path of the jpeg image
+     */
     function convertWebpToJpeg($source, $destination)
     {
         // Check if the GD extension is installed and supports WebP
@@ -713,20 +746,16 @@ class PdfHtml extends \FPDF
 
         // Handle potential alpha transparency (JPEG does not support transparency)
         // Create a new true-color image with a white background to blend transparency
-        $width         = imagesx($image);
+        $width      = imagesx($image);
         $height     = imagesy($image);
-        $jpegImage    = imagecreatetruecolor($width, $height);
-        $white         = imagecolorallocate($jpegImage, 255, 255, 255);
+        $jpegImage  = imagecreatetruecolor($width, $height);
+        $white      = imagecolorallocate($jpegImage, 255, 255, 255);
 
         imagefilledrectangle($jpegImage, 0, 0, $width, $height, $white);
         imagecopyresampled($jpegImage, $image, 0, 0, 0, 0, $width, $height, $width, $height);
 
         // Save the image as a JPEG file
         $result     = imagejpeg($jpegImage, $destination, 100);
-
-        // Free up memory
-        imagedestroy($image);
-        imagedestroy($jpegImage);
 
         return $result; // Returns true on success, false on error
     }
@@ -770,7 +799,6 @@ class PdfHtml extends \FPDF
             $this->Image($filePath, $x, $y, $width, 0, '', $link);
         } catch (\Exception $e) {
             TSJIPPY\printArray("PDF_export.php: $filePath is not a valid image");
-            //TSJIPPY\printArray($e);
         }
 
         if ($reset) {
