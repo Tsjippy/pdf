@@ -4,6 +4,7 @@
 ### Added
 
 ### Changed
+- pdf row fill color
 
 ### Fixed
 
