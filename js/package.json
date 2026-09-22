@@ -1,12 +1,12 @@
 {
-  "name": "forms",
+  "name": "pdf",
   "version": "1.0.0",
-  "description": "Forms",
-  "main": "./forms.js",
-  "type": "module",
+  "description": "PDF Viewer",
+  "main": "./pdf.js",
   "scripts": {
-    "pdf": "webpack --entry ./pdf.js --output-path . --output-filename pdf.min.js --progress --mode=production --devtool source-map",
-    "all": "run-p pdf"
+    "build": "webpack --progress",
+    "watch": "webpack --watch --progress",
+    "all": "npm run build"
   },
   "author": "Ewald Harmsen",
   "license": "ISC",
