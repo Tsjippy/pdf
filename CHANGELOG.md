@@ -6,9 +6,14 @@
 ### Changed
 
 ### Fixed
-- js variables
 
 ### Updated
+
+## [10.6.1] - 2026-09-24
+
+
+### Fixed
+- js variables
 
 ## [10.5.9] - 2026-09-22
 
