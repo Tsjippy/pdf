@@ -9,7 +9,9 @@ if (! defined('ABSPATH')) {
 }
 
 add_action('wp_enqueue_scripts', __NAMESPACE__ . '\registerPDFScripts');
-
+/**
+ * Registeres the CSS and JS
+ */
 function registerPDFScripts()
 {
     wp_enqueue_script_module('pdf', '//mozilla.github.io/pdf.js/build/pdf.mjs');

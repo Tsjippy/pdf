@@ -33,7 +33,7 @@ document.addEventListener("click", (ev) => {
   let target = ev.target;
 
   if (target.matches(".pdf-fullscreen")) {
-    ev.stopImmediatePropagation();
+    ev.stopPropagation();
 
     document
       .querySelectorAll("." + target.dataset.target)
