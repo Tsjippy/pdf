@@ -24,7 +24,6 @@ module.exports = {
     outputModule: true,
   },
 
-
   externalsType: 'module',
   externals,
 };

@@ -9,8 +9,6 @@ async function getPdfPageDimensions(pdfUrl, pageNumber = 1) {
     //const width = page.view[2];
     const height = page.view[3];
 
-    //console.log(`Page ${1} dimensions: Width = ${width} PDF units, Height = ${height} PDF units`);
-
     return height * 1.44;
   } catch (error) {
     console.error("Error loading or processing PDF:", error);
